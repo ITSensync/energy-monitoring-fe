@@ -1,0 +1,171 @@
+<template>
+  <Swiper
+    :modules="[Autoplay, Navigation]"
+    :slides-per-view="1"
+    :navigation="true"
+    :autoplay="{
+      delay: 5000,
+      disableOnInteraction: false,
+    }"
+    class="chart-swiper h-full w-full min-w-0 overflow-hidden"
+  >
+    <SwiperSlide class="min-w-0 pr-10 pl-12">
+      <LineChart :chartData="wattData" :chartOptions="chartOptions" />
+    </SwiperSlide>
+
+    <SwiperSlide class="min-w-0 pr-10 pl-12">
+      <LineChart :chartData="currentData" :chartOptions="chartOptions" />
+    </SwiperSlide>
+
+    <SwiperSlide class="min-w-0 pr-10 pl-12">
+      <LineChart :chartData="voltData" :chartOptions="chartOptions" />
+    </SwiperSlide>
+  </Swiper>
+</template>
+
+<script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import LineChart from "./LineChart.vue";
+
+const wattData = {
+  labels: ["10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30"],
+  datasets: [
+    {
+      label: "Watt 1",
+      data: [120, 140, 135, 160, 180, 170, 190],
+      borderColor: "#A3E635",
+      backgroundColor: "rgba(163,230,53,0.15)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
+      label: "Watt 2",
+      data: [110, 130, 140, 155, 175, 165, 185],
+      borderColor: "#FBBF24",
+      backgroundColor: "rgba(251,191,36,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
+      label: "Watt 3",
+      data: [115, 135, 130, 150, 170, 160, 180],
+      borderColor: "#38BDF8",
+      backgroundColor: "rgba(56,189,248,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+  ],
+};
+
+const currentData = {
+  labels: ["10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30"],
+  datasets: [
+    {
+      label: "Current 1",
+      data: [12.4, 12.0, 11.8, 12.3, 12.1, 12.2, 12.0],
+      borderColor: "#A3E635",
+      backgroundColor: "rgba(163,230,53,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
+      label: "Current 2",
+      data: [11.9, 12.1, 12.0, 12.2, 12.0, 12.1, 11.9],
+      borderColor: "#F66D9B",
+      backgroundColor: "rgba(246,109,155,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
+      label: "Current 3",
+      data: [12.2, 12.3, 12.1, 12.4, 12.2, 12.3, 12.1],
+      borderColor: "#38BDF8",
+      backgroundColor: "rgba(56,189,248,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+  ],
+};
+
+const voltData = {
+  labels: ["10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30"],
+  datasets: [
+    {
+      label: "Volt",
+      data: [230, 231, 229, 230, 231, 232, 231],
+      borderColor: "#38BDF8",
+      backgroundColor: "rgba(56,189,248,0.12)",
+      tension: 0.4,
+      fill: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+  ],
+};
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      labels: {
+        color: "#e2e8f0",
+      },
+    },
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: "#94a3b8",
+      },
+      grid: {
+        color: "rgba(255,255,255,0.05)",
+      },
+    },
+    y: {
+      ticks: {
+        color: "#94a3b8",
+      },
+      grid: {
+        color: "rgba(255,255,255,0.05)",
+      },
+    },
+  },
+};
+</script>
+
+<style>
+.swiper-pagination-bullet {
+  background: #94a3b8;
+}
+
+.swiper-pagination-bullet-active {
+  background: #a3e635;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #a3e635;
+}
+
+.chart-swiper .swiper-wrapper,
+.chart-swiper .swiper-slide {
+  min-width: 0;
+}
+</style>
