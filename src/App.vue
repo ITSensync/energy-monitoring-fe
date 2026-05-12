@@ -1,6 +1,6 @@
 <template>
   <main
-    class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(20,20,20,1),_rgba(10,10,10,1))] text-slate-100 px-4 py-4"
+    class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(20,20,20,1),_rgba(10,10,10,1))] text-slate-100 px-10 py-5"
   >
     <div class="mx-auto">
       <header
