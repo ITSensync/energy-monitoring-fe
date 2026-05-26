@@ -4,7 +4,7 @@
     :slides-per-view="1"
     :navigation="true"
     :autoplay="{
-      delay: 5000,
+      delay: 15000,
       disableOnInteraction: false,
     }"
     class="chart-swiper h-full w-full min-w-0 overflow-hidden"

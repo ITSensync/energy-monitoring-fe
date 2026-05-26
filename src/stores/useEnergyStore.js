@@ -5,36 +5,24 @@ export const useEnergyStore = defineStore('energy', {
     selectedUnit: 0,
     units: [
       {
-        name: 'Unit Produksi 7',
+        name: 'Unit Produksi Mixer',
         status: 'Running',
-        runtimeMinutes: 348,
+        runtimeMinutes: 30,
+        runtimeToday: 0,
         voltage: 231.2,
+        flow: 0,
         currents: { phase1: 12.4, phase2: 11.9, phase3: 12.2 },
         watts: { phase1: 1720, phase2: 1700, phase3: 1715 },
       },
       {
-        name: 'Unit Produksi 8',
+        name: 'Unit Produksi Oven',
         status: 'Running',
-        runtimeMinutes: 412,
-        voltage: 229.8,
-        currents: { phase1: 13.1, phase2: 12.7, phase3: 13.0 },
-        watts: { phase1: 1870, phase2: 1845, phase3: 1860 },
-      },
-      {
-        name: 'Unit Produksi 9',
-        status: 'Stopped',
-        runtimeMinutes: 156,
-        voltage: 230.5,
-        currents: { phase1: 0.0, phase2: 0.0, phase3: 0.0 },
-        watts: { phase1: 0.0, phase2: 0.0, phase3: 0.0 },
-      },
-      {
-        name: 'Unit Produksi 10',
-        status: 'Running',
-        runtimeMinutes: 289,
-        voltage: 232.1,
-        currents: { phase1: 11.8, phase2: 12.2, phase3: 11.5 },
-        watts: { phase1: 1685, phase2: 1710, phase3: 1690 },
+        runtimeMinutes: 50,
+        runtimeToday: 1022,
+        voltage: 231.2,
+        flow: 2400,
+        currents: { phase1: 12.4, phase2: 11.9, phase3: 12.2 },
+        watts: { phase1: 1720, phase2: 1700, phase3: 1715 },
       },
     ],
   }),
@@ -51,6 +39,9 @@ export const useEnergyStore = defineStore('energy', {
     runtimeMinutes(state) {
       return state.currentUnit.runtimeMinutes
     },
+    runtimeToday(state) {
+      return state.currentUnit.runtimeToday
+    },
     voltage(state) {
       return state.currentUnit.voltage
     },
@@ -60,9 +51,17 @@ export const useEnergyStore = defineStore('energy', {
     watts(state) {
       return state.currentUnit.watts
     },
+    flow(state) {
+      return state.currentUnit.flow
+    },
     formattedRuntime(state) {
       const hours = Math.floor(state.runtimeMinutes / 60)
       const minutes = state.runtimeMinutes % 60
+      return `${hours}h ${minutes.toString().padStart(2, '0')}m`
+    },
+    formattedRuntimeToday(state) {
+      const hours = Math.floor(state.runtimeToday / 60)
+      const minutes = state.runtimeToday % 60
       return `${hours}h ${minutes.toString().padStart(2, '0')}m`
     },
     statusClasses(state) {
@@ -86,6 +85,9 @@ export const useEnergyStore = defineStore('energy', {
     },
     updateWatt(phase, value) {
       this.currentUnit.watts[phase] = Number(value)
+    },
+    updateFlow(value) {
+      this.currentUnit.flow = Number(value)
     },
     incrementRuntime(minutes = 1) {
       this.currentUnit.runtimeMinutes += minutes
