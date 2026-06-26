@@ -11,44 +11,47 @@
         >
           <div>
             <p class="text-sm uppercase tracking-[0.3em] text-slate-500">
-              Monitoring Mesin
+              Sensync Technology
             </p>
             <h1
               class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl"
             >
-              Dashboard Kontrol Energi & Kinerja
+              Bakery Machine Monitoring System
             </h1>
             <p class="mt-3 max-w-2xl text-slate-400 sm:text-base">
-              Ringkasan parameter pengawasan mesin: voltase, arus, dan runtime.
+              Energy & Performance Control Dashboard
             </p>
           </div>
 
-          <div
-            class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[260px]"
-          >
-            <span class="text-xs uppercase tracking-[0.3em] text-slate-500"
-              >Unit</span
+          <div class="flex flex-col gap-3 lg:flex-row">
+            <div
+              class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[260px]"
             >
-            <select
-              v-model="selectedUnitIndex"
-              @change="selectUnit"
-              class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400"
-            >
-              <option
-                v-for="(unit, index) in energy.units"
-                :key="index"
-                :value="index"
-                class="bg-zinc-950 text-slate-100"
+              <span class="text-xs uppercase tracking-[0.3em] text-slate-500"
+                >Unit</span
               >
-                {{ unit.name }}
-              </option>
-            </select>
-            <!-- <span
-              class="inline-flex items-center justify-center rounded-full px-3 py-1 text-sm font-semibold"
-              :class="energy.statusClasses"
-            >
-              {{ energy.status }}
-            </span> -->
+              <select
+                v-model="selectedUnitIndex"
+                @change="selectUnit"
+                class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400"
+              >
+                <option
+                  v-for="(unit, index) in energy.units"
+                  :key="index"
+                  :value="index"
+                  class="bg-zinc-950 text-slate-100"
+                >
+                  {{ unit.name }}
+                </option>
+              </select>
+              <!-- <span
+                class="inline-flex items-center justify-center rounded-full px-3 py-1 text-sm font-semibold"
+                :class="energy.statusClasses"
+              >
+                {{ energy.status }}
+              </span> -->
+            </div>
+            <HeaderConnectivity />
           </div>
         </div>
       </header>
@@ -76,6 +79,7 @@ import { computed, ref } from "vue";
 import { useEnergyStore } from "./stores/useEnergyStore";
 import EnergySection from "./components/EnergySection.vue";
 import GasSection from "./components/GasSection.vue";
+import HeaderConnectivity from "./components/HeaderConnectivity.vue";
 
 const energy = useEnergyStore();
 

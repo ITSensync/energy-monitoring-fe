@@ -2,7 +2,7 @@
   <section class="grid min-w-0 gap-6 overflow-hidden">
     <!-- GRAFIK BATCH -->
     <div class="col-span-full grid min-w-0">
-      <p class="text-4xl px-2 py-3 font-bold text-slate-100">Grafik</p>
+      <!-- <p class="text-4xl px-2 py-3 font-bold text-slate-100">Grafik</p> -->
       <div
         class="col-span-full min-w-0 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-6 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] min-h-[380px]"
       >
@@ -35,7 +35,7 @@
     </div>
 
     <div class="col-span-full grid min-w-0">
-      <p class="text-4xl px-2 py-3 font-bold text-slate-100">Statistik</p>
+      <!-- <p class="text-4xl px-2 py-3 font-bold text-slate-100">Statistik</p> -->
       <div class="grid md:grid-cols-3 gap-4">
         <div
           class="relative overflow-hidden rounded-3xl border border-cyan-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
@@ -177,8 +177,8 @@
 <script setup>
 import { computed } from "vue";
 import { useEnergyStore } from "../stores/useEnergyStore";
-import ChartSlider from "./ChartSlider.vue";
-import GasChart from "./GasChart.vue";
+import ChartSlider from "./Chart/ChartSlider.vue";
+import GasChart from "./Chart/GasChart.vue";
 
 const energy = useEnergyStore();
 
