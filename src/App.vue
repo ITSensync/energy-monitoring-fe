@@ -28,20 +28,20 @@
               class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[260px]"
             >
               <span class="text-xs uppercase tracking-[0.3em] text-slate-500"
-                >Unit</span
+                >Menu</span
               >
               <select
-                v-model="selectedUnitIndex"
-                @change="selectUnit"
+                v-model="selectedMenuIndex"
+                @change="selectMenu"
                 class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400"
               >
                 <option
-                  v-for="(unit, index) in energy.units"
+                  v-for="(menu, index) in menus.menus"
                   :key="index"
                   :value="index"
                   class="bg-zinc-950 text-slate-100"
                 >
-                  {{ unit.name }}
+                  {{ menu.name }}
                 </option>
               </select>
               <!-- <span
@@ -56,15 +56,16 @@
         </div>
       </header>
 
-      <div v-if="selectedUnitIndex == 0">
+      <div v-if="selectedMenuIndex == 0">
         <EnergySection />
       </div>
-      <div v-else-if="selectedUnitIndex == 1">
-        <GasSection />
+      <div v-else-if="selectedMenuIndex == 1">
+        <!-- <GasSection /> -->
+        <ReportSection />
       </div>
       <div v-else>
         <p class="text-center text-xl text-slate-500">
-          Unit tidak ditemukan. Silakan pilih unit yang valid.
+          Menu tidak ditemukan. Silakan pilih menu yang valid.
         </p>
       </div>
       <footer class="mt-4 text-center text-sm text-zinc-500">
@@ -80,14 +81,16 @@ import { useEnergyStore } from "./stores/useEnergyStore";
 import EnergySection from "./components/EnergySection.vue";
 import GasSection from "./components/GasSection.vue";
 import HeaderConnectivity from "./components/HeaderConnectivity.vue";
+import { useMenuStore } from "./stores/useMenuStore.js";
+import ReportSection from "./components/ReportSection.vue";
 
-const energy = useEnergyStore();
+const menus = useMenuStore();
 
-const selectedUnitIndex = ref(energy.selectedUnit);
+const selectedMenuIndex = ref(menus.selectedMenu);
 
 const currentYear = computed(() => new Date().getFullYear());
 
-function selectUnit() {
-  energy.selectUnit(selectedUnitIndex.value);
+function selectMenu() {
+  menus.selectMenu(selectedMenuIndex.value);
 }
 </script>

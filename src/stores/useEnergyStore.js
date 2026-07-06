@@ -94,3 +94,4 @@ export const useEnergyStore = defineStore('energy', {
     },
   },
 })
+
