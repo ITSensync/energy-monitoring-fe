@@ -170,7 +170,7 @@ function nextPage() {
                 Waktu
               </th>
               <th class="px-5 py-4 uppercase tracking-[0.18em] text-lime-400">
-                Energi
+                Energy
               </th>
               <th class="px-5 py-4 uppercase tracking-[0.18em] text-amber-400">
                 Phase (I)
