@@ -8,7 +8,7 @@ const totalPages = ref(5);
 const reports = ref([
   {
     timestamp: "2026-07-01 08:00",
-    energy: "1.25 kWh",
+    energy: "1.25",
     phase1: "0.95",
     phase2: "1.05",
     phase3: "0.85",
