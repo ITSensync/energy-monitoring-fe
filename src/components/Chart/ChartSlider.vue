@@ -63,9 +63,22 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
+    datalabels: {
+      color: "#aaaaaa",
+      font: {
+        size: 18,
+        weight: "bold",
+      },
+    },
     legend: {
       labels: {
-        color: "#e2e8f0",
+        color: "#ffffff",
+        font: {
+          size: 20, // Ukuran tulisan legend
+          weight: "bold",
+        },
+        boxWidth: 20,
+        boxHeight: 10,
       },
     },
   },
@@ -73,13 +86,17 @@ const chartOptions = {
     x: {
       ticks: {
         color: "#94a3b8",
+        font: {
+          size: 18, // Ukuran angka sumbu X
+          weight: "bold",
+        },
       },
       title: {
         display: true,
         text: "Time", // label sumbu X
         color: "#94a3b8",
         font: {
-          size: 12, // ukuran font
+          size: 24, // ukuran font
           weight: "bold", // normal | bold | 500 | 700
           // style: "italic", // normal | italic
           family: "Arial", // font family
@@ -93,13 +110,17 @@ const chartOptions = {
     y: {
       ticks: {
         color: "#94a3b8",
+        font: {
+          size: 18, // Ukuran angka sumbu Y
+          weight: "bold",
+        },
       },
       title: {
         display: true,
         text: "Ampere (A)", // label sumbu X
         color: "#94a3b8",
         font: {
-          size: 12, // ukuran font
+          size: 24, // ukuran font
           weight: "bold", // normal | bold | 500 | 700
           // style: "italic", // normal | italic
           family: "Arial", // font family

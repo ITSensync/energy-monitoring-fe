@@ -42,6 +42,10 @@ const chartOptions = {
     legend: {
       labels: {
         color: "#e2e8f0",
+        font: {
+          size: 16,
+          weight: "bold",
+        }
       },
     },
     datalabels: {
@@ -49,7 +53,7 @@ const chartOptions = {
       align: "top",      // taruh di atas bar
       color: "#94a3b8",
       font: {
-        size: 10,
+        size: 20,
         weight: "bold"
       },
       formatter: (value) => `${value} h`
@@ -59,11 +63,19 @@ const chartOptions = {
     x: {
       ticks: {
         color: "#94a3b8",
+        font: {
+          size: 18,      // Ukuran angka sumbu X
+          weight: "bold"
+        }
       },
     },
     y: {
       ticks: {
         color: "#94a3b8",
+        font: {
+          size: 18,
+          weight: "bold"
+        }
       },
       beginAtZero: true,
       max: 24,

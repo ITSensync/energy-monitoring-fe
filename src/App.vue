@@ -10,30 +10,30 @@
           class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <p class="text-sm uppercase tracking-[0.3em] text-slate-500">
+            <p class="text-2xl uppercase tracking-[0.3em] text-slate-500">
               Sensync Technology
             </p>
             <h1
-              class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-4xl"
+              class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-6xl"
             >
               Bakery Machine Monitoring System
             </h1>
-            <p class="mt-3 max-w-2xl text-slate-400 sm:text-base">
+            <p class="mt-3 max-w-2xl text-slate-400 sm:text-xl">
               Energy & Performance Control Dashboard
             </p>
           </div>
 
           <div class="flex flex-col gap-3 lg:flex-row">
             <div
-              class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[260px]"
+              class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[300px]"
             >
-              <span class="text-xs uppercase tracking-[0.3em] text-slate-500"
+              <span class="text-xl uppercase tracking-[0.3em] text-slate-500"
                 >Menu</span
               >
               <select
                 v-model="selectedMenuIndex"
                 @change="selectMenu"
-                class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400"
+                class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400 text-2xl"
               >
                 <option
                   v-for="(menu, index) in menus.menus"
@@ -68,7 +68,7 @@
           Menu tidak ditemukan. Silakan pilih menu yang valid.
         </p>
       </div>
-      <footer class="mt-4 text-center text-sm text-zinc-500">
+      <footer class="mt-2 text-center text-sm text-zinc-500">
         <p>&copy; {{ currentYear }} Sensync. All rights reserved.</p>
       </footer>
     </div>

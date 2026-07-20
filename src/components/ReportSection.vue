@@ -70,10 +70,10 @@ function nextPage() {
       class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
     >
       <div>
-        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-100">
+        <h2 class="mt-2 text-5xl font-semibold tracking-tight text-slate-100">
           Report Dashboard
         </h2>
-        <p class="mt-1 max-w-2xl text-slate-400">
+        <p class="mt-1 max-w-5xl text-2xl text-slate-400">
           Kosongkan end date untuk menampilkan data rentang satu hari
         </p>
       </div>
@@ -82,24 +82,24 @@ function nextPage() {
     <div class="mb-6 gap-4 flex flex-row w-full justify-between">
       <div class="flex gap-4 w-2/3">
         <label class="block w-1/3">
-          <span class="mb-2 block text-sm font-medium text-slate-400"
+          <span class="mb-2 block text-2xl font-medium text-slate-400"
             >Start Date</span
           >
           <input
             type="date"
             v-model="startDate"
-            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
+            class="text-2xl w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
           />
         </label>
 
         <label class="block w-1/3">
-          <span class="mb-2 block text-sm font-medium text-slate-400"
+          <span class="mb-2 block text-2xl font-medium text-slate-400"
             >End Date</span
           >
           <input
             type="date"
             v-model="endDate"
-            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
+            class="text-2xl w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
           />
         </label>
       </div>
@@ -140,7 +140,7 @@ function nextPage() {
               d="M72 170h58l46 72 46-72h58l-74 112 76 112h-58l-48-74-48 74H72l76-112L72 170z"
             />
           </svg>
-          <p class="text-xl">Export</p>
+          <p class="text-2xl">Export</p>
         </button>
       </div>
 
@@ -162,7 +162,7 @@ function nextPage() {
         <table
           class="min-w-full border-separate border-spacing-0 text-left text-sm"
         >
-          <thead class="bg-zinc-900/95 text-slate-400">
+          <thead class="bg-zinc-900/95 text-slate-400 text-xl">
             <tr>
               <th
                 class="px-5 py-4 uppercase tracking-[0.18em] text-indigo-400-400"
@@ -192,7 +192,7 @@ function nextPage() {
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-800">
+          <tbody class="divide-y divide-zinc-800 text-2xl">
             <tr
               v-for="(row, index) in reports"
               :key="index"
@@ -210,18 +210,18 @@ function nextPage() {
           </tbody>
         </table>
       </div>
-      <div class="border-t border-zinc-800 bg-zinc-900/90 px-5 py-4 text-sm text-slate-500">
+      <div class="border-t border-zinc-800 bg-zinc-900/90 px-5 py-4 text-2xl text-slate-500">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <span>Menampilkan {{ reports.length }} baris data.</span>
           <div class="flex items-center gap-2 rounded-3xl bg-zinc-950/90 p-2">
             <button
               type="button"
               @click="prevPage"
-              class="rounded-2xl px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-zinc-800"
+              class="rounded-2xl px-3 py-2 text-xl font-medium text-slate-200 transition hover:bg-zinc-800"
             >
               Prev
             </button>
-            <div class="flex items-center gap-2 px-3 py-2 text-sm text-slate-300">
+            <div class="flex items-center gap-2 px-3 py-2 text-xl text-slate-300">
               <span class="font-semibold text-slate-100">Page</span>
               <span class="font-semibold text-white">{{ currentPage }}</span>
               <span class="text-slate-400">/</span>
@@ -230,7 +230,7 @@ function nextPage() {
             <button
               type="button"
               @click="nextPage"
-              class="rounded-2xl px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-zinc-800"
+              class="rounded-2xl px-3 py-2 text-xl font-medium text-slate-200 transition hover:bg-zinc-800"
             >
               Next
             </button>

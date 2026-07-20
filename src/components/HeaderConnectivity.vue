@@ -3,8 +3,8 @@
     class="flex flex-row items-center gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40"
   >
     <div>
-      <p class="text-sm font-medium text-slate-300">{{ todayDate }}</p>
-      <p class="mt-1 font-mono text-2xl font-semibold text-slate-100">
+      <p class="text-2xl font-medium text-slate-300">{{ todayDate }}</p>
+      <p class="mt-1 font-mono text-4xl font-semibold text-slate-100">
         {{ currentTime }}
       </p>
     </div>
@@ -12,7 +12,7 @@
 
     <div class="flex items-center justify-between gap-4">
       <span
-        class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border"
+        class="inline-flex h-16 w-16 items-center justify-center rounded-2xl border"
         :class="isConnected ? connectedClasses : disconnectedClasses"
         :title="connectionLabel"
         :aria-label="connectionLabel"
@@ -20,7 +20,7 @@
         <svg
           v-if="isConnected"
           viewBox="0 0 24 24"
-          class="h-8 w-8"
+          class="h-12 w-12"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
