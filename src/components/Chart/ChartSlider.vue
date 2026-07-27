@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -23,41 +24,21 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import LineChart from "./LineChart.vue";
 
-const currentData = {
-  labels: ["10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30"],
+const props = defineProps({
+  todayAverageData: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const currentData = computed(() => ({
+  labels: props.todayAverageData.map((item) => formatWibTime(item.createdAt)),
   datasets: [
-    {
-      label: "Phase 1",
-      data: [12.4, 12.0, 11.8, 12.3, 12.1, 12.2, 12.0],
-      borderColor: "#A3E635",
-      backgroundColor: "rgba(163,230,53,0.12)",
-      tension: 0.4,
-      fill: true,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    },
-    {
-      label: "Phase 2",
-      data: [11.9, 12.1, 12.0, 12.2, 12.0, 12.1, 11.9],
-      borderColor: "#F66D9B",
-      backgroundColor: "rgba(246,109,155,0.12)",
-      tension: 0.4,
-      fill: true,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    },
-    {
-      label: "Phase 3",
-      data: [12.2, 12.3, 12.1, 12.4, 12.2, 12.3, 12.1],
-      borderColor: "#38BDF8",
-      backgroundColor: "rgba(56,189,248,0.12)",
-      tension: 0.4,
-      fill: true,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    },
+    buildPhaseDataset("Phase 1", "arus1", 1, "#A3E635", "rgba(163,230,53,0.12)"),
+    buildPhaseDataset("Phase 2", "arus2", 1.7, "#F66D9B", "rgba(246,109,155,0.12)"),
+    buildPhaseDataset("Phase 3", "arus3", 0.5, "#38BDF8", "rgba(56,189,248,0.12)"),
   ],
-};
+}));
 
 const chartOptions = {
   responsive: true,
@@ -133,6 +114,43 @@ const chartOptions = {
     },
   },
 };
+
+function buildPhaseDataset(label, key, multiplier, borderColor, backgroundColor) {
+  return {
+    label,
+    data: props.todayAverageData.map((item) => toScaledNumber(item[key], multiplier)),
+    borderColor,
+    backgroundColor,
+    tension: 0.4,
+    fill: true,
+    pointRadius: 3,
+    pointHoverRadius: 5,
+  };
+}
+
+function toScaledNumber(value, multiplier) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Number((number * multiplier).toFixed(2)) : 0;
+}
+
+function formatWibTime(value) {
+  if (!value) return "--:--";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "--:--";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Jakarta",
+  })
+    .format(date)
+    .replace(".", ":");
+}
 </script>
 
 <style>

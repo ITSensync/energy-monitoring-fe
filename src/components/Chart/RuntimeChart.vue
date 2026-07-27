@@ -3,37 +3,58 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import BarChart from "./BarChart.vue";
 
-const chartData = {
-  labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-  datasets: [
-    {
-      label: "Runtime (Hour)",
-      data: [22, 24, 21, 23, 18, 20, 19],
-      backgroundColor: (context) => {
-        const chart = context.chart;
-        const { ctx, chartArea } = chart;
+const props = defineProps({
+  weeklyData: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-        // Saat chart pertama kali render, chartArea belum ada
-        if (!chartArea) return "#3B82F6";
+const fallbackWeeklyData = [
+  { day: "Sunday", total: 0 },
+  { day: "Monday", total: 0 },
+  { day: "Tuesday", total: 0 },
+  { day: "Wednesday", total: 0 },
+  { day: "Thursday", total: 0 },
+  { day: "Friday", total: 0 },
+  { day: "Saturday", total: 0 },
+];
 
-        const gradient = ctx.createLinearGradient(
-          0,
-          chartArea.top,
-          0,
-          chartArea.bottom,
-        );
+const chartData = computed(() => {
+  const weeklyData = props.weeklyData.length ? props.weeklyData : fallbackWeeklyData;
 
-        gradient.addColorStop(1, "#1E3A8A"); // biru tua (atas)
-        gradient.addColorStop(0, "#70ffff"); // biru muda (bawah)
+  return {
+    labels: weeklyData.map((item) => item.day || item.date),
+    datasets: [
+      {
+        label: "Runtime (Hour)",
+        data: weeklyData.map((item) => minutesToCappedHours(item.total)),
+        backgroundColor: (context) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
 
-        return gradient;
+          if (!chartArea) return "#3B82F6";
+
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom,
+          );
+
+          gradient.addColorStop(1, "#1E3A8A");
+          gradient.addColorStop(0, "#70ffff");
+
+          return gradient;
+        },
+        borderRadius: 8,
       },
-      borderRadius: 8,
-    },
-  ],
-};
+    ],
+  };
+});
 
 const chartOptions = {
   responsive: true,
@@ -82,4 +103,14 @@ const chartOptions = {
     },
   },
 };
+
+function minutesToCappedHours(value) {
+  const minutes = Number(value);
+
+  if (!Number.isFinite(minutes)) {
+    return 0;
+  }
+
+  return Math.min(Number((minutes / 60).toFixed(2)), 24);
+}
 </script>

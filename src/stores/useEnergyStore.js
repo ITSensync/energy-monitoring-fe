@@ -66,8 +66,8 @@ export const useEnergyStore = defineStore('energy', {
     },
     statusClasses(state) {
       return state.status === 'Running'
-        ? 'bg-lime-500 text-slate-950'
-        : 'bg-amber-500 text-slate-950'
+        ? 'border border-lime-500/20 bg-lime-500/10 text-lime-400'
+        : 'border border-amber-500/20 bg-amber-500/10 text-amber-400'
     },
   },
   actions: {

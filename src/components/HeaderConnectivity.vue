@@ -65,14 +65,10 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
-const CHECK_URL = "https://google.com";
-const CHECK_INTERVAL = 30000;
-
 const now = ref(new Date());
 const isConnected = ref(navigator.onLine);
 
 let clockTimer;
-let connectionTimer;
 
 const connectedClasses =
   "border-lime-400/40 bg-lime-400/10 text-lime-400 shadow-[0_0_24px_rgba(163,230,53,0.22)]";
@@ -103,30 +99,8 @@ const connectionLabel = computed(() =>
   isConnected.value ? "Connected" : "Disconnected",
 );
 
-async function checkInternetConnection() {
-  const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 5000);
-
-  try {
-    await fetch(CHECK_URL, {
-      method: "HEAD",
-      mode: "no-cors",
-      cache: "no-store",
-      signal: controller.signal,
-    });
-    isConnected.value = true;
-  } catch {
-    isConnected.value = false;
-  } finally {
-    window.clearTimeout(timeout);
-  }
-}
-
 function updateOnlineStatus() {
   isConnected.value = navigator.onLine;
-  if (navigator.onLine) {
-    checkInternetConnection();
-  }
 }
 
 onMounted(() => {
@@ -134,15 +108,13 @@ onMounted(() => {
     now.value = new Date();
   }, 1000);
 
-  checkInternetConnection();
-  connectionTimer = window.setInterval(checkInternetConnection, CHECK_INTERVAL);
+  updateOnlineStatus();
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
 });
 
 onBeforeUnmount(() => {
   window.clearInterval(clockTimer);
-  window.clearInterval(connectionTimer);
   window.removeEventListener("online", updateOnlineStatus);
   window.removeEventListener("offline", updateOnlineStatus);
 });
