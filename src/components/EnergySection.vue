@@ -393,6 +393,56 @@
       </div>
     </div>
   </section>
+
+  <Transition
+    enter-active-class="transition duration-300"
+    enter-from-class="translate-y-5 opacity-0"
+    enter-to-class="translate-y-0 opacity-100"
+    leave-active-class="transition duration-200"
+    leave-from-class="translate-y-0 opacity-100"
+    leave-to-class="translate-y-5 opacity-0"
+  >
+    <div
+      v-if="alertData.alert"
+      class="fixed bottom-6 right-6 z-50 w-[500px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl"
+    >
+      <div class="flex items-start gap-4 p-5">
+        <!-- Icon -->
+        <div
+          class="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-red-500/15 text-red-400"
+        >
+          <svg
+            class="h-16 w-16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M15 9l-6 6" />
+            <path d="M9 9l6 6" />
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1">
+          <p class="text-2xl font-bold text-red-400">Data Not Updated</p>
+
+          <p class="mt-1 text-xl text-slate-300">
+            {{ alertData.message }}
+          </p>
+        </div>
+
+        <!-- Close -->
+        <button
+          @click="alertData.alert = false"
+          class="rounded-lg text-2xl p-1 text-slate-400 transition hover:bg-zinc-800 hover:text-white"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -421,6 +471,10 @@ const latestAverage = ref({
   vibration: 0,
   temp: 0,
   lastUpdate: "",
+});
+const alertData = ref({
+  alert: false,
+  message: "",
 });
 
 const alarmRules = [
@@ -498,7 +552,7 @@ const alarmStatusList = computed(() =>
         level: "alarm",
         text: rule.text,
       };
-    })
+    }),
 );
 
 // console.log(runtimeData.value)
@@ -543,6 +597,13 @@ const { connect, disconnect } = useWebSocketFetch("mtamixer", (payload) => {
         vibration: lastData.getaran,
         temp: lastData.temp,
         lastUpdate: formatRelativeTime(lastData.createdAt),
+      };
+      break;
+
+    case "not-update-alert":
+      alertData.value = {
+        alert: payload.data.alert,
+        message: payload.data.message,
       };
       break;
 

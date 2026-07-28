@@ -4,7 +4,7 @@ export const useWebSocketFetch = (machineId, onData) => {
   const socket = ref(null);
 
   const connect = () => {
-    socket.value = new window.WebSocket("ws://192.168.1.100:8002");
+    socket.value = new window.WebSocket("ws://localhost:8002");
 
     socket.value.onopen = () => {
       socket.value.send(
