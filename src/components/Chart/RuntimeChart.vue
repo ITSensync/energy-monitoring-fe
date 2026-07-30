@@ -64,7 +64,7 @@ const chartOptions = {
       labels: {
         color: "#e2e8f0",
         font: {
-          size: 16,
+          size: 20,
           weight: "bold",
         }
       },
@@ -74,7 +74,7 @@ const chartOptions = {
       align: "top",      // taruh di atas bar
       color: "#94a3b8",
       font: {
-        size: 20,
+        size: 22,
         weight: "bold"
       },
       formatter: (value) => `${value} h`
@@ -85,7 +85,7 @@ const chartOptions = {
       ticks: {
         color: "#94a3b8",
         font: {
-          size: 18,      // Ukuran angka sumbu X
+          size: 20,      // Ukuran angka sumbu X
           weight: "bold"
         }
       },
@@ -94,7 +94,7 @@ const chartOptions = {
       ticks: {
         color: "#94a3b8",
         font: {
-          size: 18,
+          size: 20,
           weight: "bold"
         }
       },

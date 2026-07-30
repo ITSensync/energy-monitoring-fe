@@ -27,7 +27,7 @@
 
         <!-- AREA GRAFIK -->
         <div
-          class="mt-6 h-[500px] w-full min-w-0 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/95 p-4"
+          class="mt-6 h-[550px] w-full min-w-0 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/95 p-4"
         >
           <!-- Placeholder -->
           <div
@@ -48,7 +48,7 @@
               class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-lime-400"
             ></div>
             <p
-              class="text-lg font-bold text-lime-400 uppercase tracking-[0.3em]"
+              class="text-xl font-bold text-lime-400 uppercase tracking-[0.3em]"
             >
               Energy Consumption
             </p>
@@ -57,9 +57,9 @@
             >
               <div class="flex w-full items-center justify-between gap-4">
                 <div>
-                  <p class="text-xl text-slate-400">Consumption Value</p>
-                  <p class="mt-2 text-6xl font-semibold text-slate-100">
-                    {{ latestAverage.kwatt }} <sub class="text-2xl">kWh</sub>
+                  <p class="text-2xl text-slate-400">Consumption Value</p>
+                  <p class="mt-2 text-7xl font-semibold text-slate-100">
+                    {{ latestAverage.kwatt }} <sub class="text-3xl">kWh</sub>
                   </p>
                 </div>
                 <!-- <span
@@ -67,7 +67,7 @@
                   >Stabil</span
                 > -->
               </div>
-              <div class="mt-7 flex justify-between text-lg">
+              <div class="mt-7 flex justify-between text-xl">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -81,7 +81,7 @@
               class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-rose-400"
             ></div>
             <p
-              class="text-lg font-bold text-rose-400 uppercase tracking-[0.3em]"
+              class="text-xl font-bold text-rose-400 uppercase tracking-[0.3em]"
             >
               Voltage
             </p>
@@ -90,8 +90,8 @@
             >
               <div class="flex w-full items-center justify-between gap-4">
                 <div>
-                  <p class="text-xl text-slate-400">System</p>
-                  <p class="mt-2 text-6xl font-semibold text-slate-100">
+                  <p class="text-2xl text-slate-400">System</p>
+                  <p class="mt-2 text-7xl font-semibold text-slate-100">
                     {{ latestAverage.volt }} <sub class="text-2xl">V</sub>
                   </p>
                 </div>
@@ -100,7 +100,7 @@
                   >Stabil</span
                 > -->
               </div>
-              <div class="mt-7 flex justify-between text-lg">
+              <div class="mt-7 flex justify-between text-xl">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -117,7 +117,7 @@
               class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-sky-400"
             ></div>
             <p
-              class="text-lg font-bold uppercase tracking-[0.3em] text-sky-500"
+              class="text-xl font-bold uppercase tracking-[0.3em] text-sky-500"
             >
               Vibration
             </p>
@@ -125,12 +125,12 @@
               class="mt-6 flex flex-col items-center rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6"
             >
               <div class="flex flex-col w-full justify-between gap-4">
-                <p class="text-xl text-slate-400">Sensor Value</p>
-                <p class="text-6xl font-semibold text-slate-100">
+                <p class="text-2xl text-slate-400">Sensor Value</p>
+                <p class="text-7xl font-semibold text-slate-100">
                   {{ latestAverage.vibration }} <sub class="text-2xl">Hz</sub>
                 </p>
               </div>
-              <div class="mt-7 flex justify-between w-full text-lg">
+              <div class="mt-5 flex justify-between w-full text-lg">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -139,13 +139,13 @@
 
           <!-- Alert -->
           <div
-            class="relative overflow-hidden flex max-h-[300px] min-w-0 w-full flex-col rounded-[2rem] border border-zinc-800 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+            class="relative overflow-hidden flex h-full min-w-0 w-full flex-col rounded-[2rem] border border-zinc-800 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
           >
             <div
               class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-red-400"
             ></div>
             <p
-              class="font-bold text-lg uppercase tracking-[0.3em] text-red-500"
+              class="font-bold text-xl uppercase tracking-[0.3em] text-red-500"
             >
               Alarm Status
             </p>
@@ -188,7 +188,7 @@
                     </svg>
                   </span>
                   <div class="min-w-0">
-                    <p class="truncate text-xl font-semibold text-slate-100">
+                    <p class="truncate text-2xl font-semibold text-slate-100">
                       {{ status.text }}
                     </p>
                     <!-- <p class="text-lg text-slate-400">{{ status.value }}</p> -->
@@ -229,10 +229,10 @@
       </div> -->
     </div>
 
-    <div class="col-span-full grid grid-cols-2 gap-6 min-w-0">
+    <div class="col-span-full grid grid-cols-2 gap-6 min-w-0 h-[30svh]">
       <!-- BAR CHART RUNTIME HARIAN -->
       <div
-        class="min-w-0 col-span-1 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-6 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] min-h-[380px]"
+        class="min-w-0 col-span-1 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-6 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] h-[30svh]"
       >
         <!-- <div class="flex items-center justify-between">
           <div>
@@ -251,7 +251,7 @@
         <div class="flex flex-col gap-6 mt-2">
           <!-- <p class="font-medium text-4xl">Machine Runtime Today</p> -->
           <div
-            class="h-[320px] w-full min-w-0 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/95 p-4"
+            class="h-[380px] w-full min-w-0 overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/95 p-4"
           >
             <!-- Placeholder -->
             <div
@@ -267,20 +267,20 @@
 
       <div class="flex flex-row gap-4">
         <div
-          class="w-1/2 relative overflow-hidden rounded-3xl border border-orange-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+          class="h-[30svh] w-1/2 relative overflow-hidden rounded-3xl border border-orange-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
         >
           <div
             class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-orange-400"
           ></div>
-          <div class="flex flex-col h-full justify-between py-2">
+          <div class="flex flex-col h-full justify-center gap-8 py-2">
             <div class="flex items-start justify-between">
               <div class="flex flex-col gap-2">
                 <p
-                  class="font-semibold tracking-[0.2em] text-lg text-orange-300"
+                  class="font-semibold tracking-[0.2em] text-2xl text-orange-300"
                 >
                   OPERATING TIME TODAY
                 </p>
-                <p class="font-semibold text-6xl text-slate-100">
+                <p class="font-semibold text-8xl text-slate-100">
                   {{ formatTextMinutes(runtimeData.today) }}
                 </p>
               </div>
@@ -301,12 +301,12 @@
               <div class="flex items-start justify-between gap-4">
                 <div>
                   <p
-                    class="text-lg font-semibold uppercase tracking-[0.2em] text-orange-300"
+                    class="text-2xl font-semibold uppercase tracking-[0.2em] text-orange-300"
                   >
                     Total Operating Time
                   </p>
                   <p
-                    class="mt-3 text-6xl font-semibold leading-none text-slate-100"
+                    class="mt-3 text-8xl font-semibold leading-none text-slate-100"
                   >
                     {{ formatTextMinutes(runtimeData.allTime) }}
                   </p>
@@ -326,7 +326,7 @@
               </div>
               <div>
                 <div
-                  class="flex items-center justify-between text-lg text-slate-400"
+                  class="flex items-center justify-between text-xl text-slate-400"
                 >
                   <span>Accumulation until today</span>
                   <!-- <span>Target 1440 menit</span> -->
@@ -337,7 +337,7 @@
                       :style="runtimeDailyBarStyle"
                     ></div>
                   </div> -->
-                <p class="mt-1 text-lg text-slate-400">
+                <p class="mt-1 text-xl text-slate-400">
                   Total runtime of the machine since it was first turned on.
                 </p>
               </div>
@@ -346,7 +346,7 @@
         </div>
 
         <div
-          class="relative overflow-hidden flex h-[380px] min-w-0 w-1/2 flex-col rounded-[2rem] border border-zinc-800 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+          class="relative overflow-hidden flex h-[30svh] min-w-0 w-1/2 flex-col rounded-[2rem] border border-zinc-800 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
         >
           <div
             class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-amber-300"
@@ -404,7 +404,7 @@
   >
     <div
       v-if="alertData.alert"
-      class="fixed bottom-6 right-6 z-50 w-[500px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl"
+      class="fixed bottom-6 p-2 right-6 z-50 w-[550px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl"
     >
       <div class="flex items-start gap-4 p-5">
         <!-- Icon -->
@@ -426,9 +426,9 @@
 
         <!-- Content -->
         <div class="flex-1">
-          <p class="text-2xl font-bold text-red-400">Data Not Updated</p>
+          <p class="text-3xl font-bold text-red-400">Data Not Updated</p>
 
-          <p class="mt-1 text-xl text-slate-300">
+          <p class="mt-1 text-2xl text-slate-300">
             {{ alertData.message }}
           </p>
         </div>

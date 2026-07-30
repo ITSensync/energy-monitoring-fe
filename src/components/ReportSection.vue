@@ -188,7 +188,7 @@ function nextPage() {
                 Vibration
               </th>
               <th class="px-5 py-4 uppercase tracking-[0.18em] text-violet-400">
-                Status
+                Temp
               </th>
             </tr>
           </thead>

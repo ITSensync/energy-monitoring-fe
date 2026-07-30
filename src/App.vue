@@ -68,7 +68,7 @@
           Menu tidak ditemukan. Silakan pilih menu yang valid.
         </p>
       </div>
-      <footer class="mt-2 text-center text-sm text-zinc-500">
+      <footer class="mt-4 text-center text-sm text-zinc-500">
         <p>&copy; {{ currentYear }} Sensync. All rights reserved.</p>
       </footer>
     </div>
