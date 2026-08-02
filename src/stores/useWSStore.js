@@ -4,7 +4,8 @@ export const useWebSocketFetch = (machineId, onData) => {
   const socket = ref(null);
 
   const connect = () => {
-    socket.value = new window.WebSocket("ws://localhost:8002");
+    const wsUrl = import.meta.env.VITE_WS_URL
+    socket.value = new window.WebSocket(wsUrl);
 
     socket.value.onopen = () => {
       socket.value.send(
