@@ -44,13 +44,13 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    datalabels: {
-      color: "#aaaaaa",
-      font: {
-        size: 18,
-        weight: "bold",
-      },
-    },
+    // datalabels: {
+    //   color: "#aaaaaa",
+    //   font: {
+    //     size: 18,
+    //     weight: "bold",
+    //   },
+    // },
     legend: {
       labels: {
         color: "#ffffff",

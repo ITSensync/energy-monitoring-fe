@@ -579,7 +579,7 @@ const { connect, disconnect } = useWebSocketFetch("mtamixer", (payload) => {
       }));
       break;
 
-    case "today-average":
+    case "today-records":
       todayAverage.value = payload.data;
       const length = todayAverage.value.length;
       const lastData = todayAverage.value[length - 1];
