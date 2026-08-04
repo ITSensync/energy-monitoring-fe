@@ -1,48 +1,65 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const startDate = ref("");
 const endDate = ref("");
 const currentPage = ref(1);
-const totalPages = ref(5);
-const reports = ref([
-  {
-    timestamp: "2026-07-01 08:00",
-    energy: "1.25",
-    phase1: "0.95",
-    phase2: "1.05",
-    phase3: "0.85",
-    voltage: "220",
-    vibration: "0.02",
-    runtime: "04:12",
-    status: "Normal",
-  },
-  {
-    timestamp: "2026-07-01 12:00",
-    energy: "1.82",
-    phase1: "1.10",
-    phase2: "1.20",
-    phase3: "0.90",
-    vibration: "0.02",
-    runtime: "03:26",
-    voltage: "220",
-    status: "Normal",
-  },
-  {
-    timestamp: "2026-07-01 16:00",
-    energy: "2.07",
-    phase1: "1.25",
-    phase2: "1.35",
-    phase3: "1.00",
-    vibration: "0.02",
-    runtime: "05:08",
-    voltage: "220",
-    status: "Optimal",
-  },
-]);
+const totalPages = ref(1);
+const reports = ref([]);
+const loading = ref(false);
+const error = ref("");
+const limit = 10;
+
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
+
+async function fetchReports(page = 1) {
+  loading.value = true;
+  error.value = "";
+
+  const endDateValue = endDate.value || startDate.value;
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  if (startDate.value) {
+    params.set("startDate", startDate.value);
+  }
+
+  if (endDateValue) {
+    params.set("endDate", endDateValue);
+  }
+
+  try {
+    const response = await fetch(`${apiBaseUrl}/records/paginated?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const body = await response.json();
+    const recordList = body.records || body.data || body;
+
+    reports.value = Array.isArray(recordList) ? recordList : [];
+    currentPage.value = page;
+
+    if (body.totalPages || body.total_pages) {
+      totalPages.value = body.totalPages || body.total_pages;
+    } else if (body.total && Array.isArray(recordList)) {
+      totalPages.value = Math.max(1, Math.ceil(body.total / limit));
+    } else {
+      totalPages.value = Math.max(1, page);
+    }
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : String(err);
+    reports.value = [];
+  } finally {
+    loading.value = false;
+  }
+}
 
 function handleSubmit() {
-  // Nanti tambahkan logika slicing berdasarkan rentang tanggal
+  currentPage.value = 1;
+  fetchReports(1);
 }
 
 function handleExport() {
@@ -50,15 +67,26 @@ function handleExport() {
 }
 
 function goToPage(page) {
-  currentPage.value = page;
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    fetchReports(page);
+  }
 }
 
 function prevPage() {
-  if (currentPage.value > 1) currentPage.value -= 1;
+  if (currentPage.value > 1) {
+    const next = currentPage.value - 1;
+    currentPage.value = next;
+    fetchReports(next);
+  }
 }
 
 function nextPage() {
-  if (currentPage.value < totalPages.value) currentPage.value += 1;
+  if (currentPage.value < totalPages.value) {
+    const next = currentPage.value + 1;
+    currentPage.value = next;
+    fetchReports(next);
+  }
 }
 </script>
 
@@ -102,6 +130,27 @@ function nextPage() {
             class="text-2xl w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
           />
         </label>
+
+        <div class="flex items-end w-1/3">
+          <!-- <button
+            type="button"
+            @click="handleSubmit"
+            class="w-full rounded-3xl bg-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600"
+          >
+            Submit
+          </button> -->
+          <button
+            type="button"
+            @click="handleSubmit"
+            class="w-1/2 items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400"
+          >
+            <p class="text-2xl">Submit</p>
+          </button>
+          <div class="ml-4 self-end text-right text-sm text-slate-400">
+            <p v-if="loading">Loading...</p>
+            <p v-else-if="error" class="text-rose-400">{{ error }}</p>
+          </div>
+        </div>
       </div>
 
       <div class="flex items-end">
@@ -143,16 +192,6 @@ function nextPage() {
           <p class="text-2xl">Export</p>
         </button>
       </div>
-
-      <!-- <div class="flex items-end w-1/3">
-        <button
-          type="button"
-          @click="handleSubmit"
-          class="w-full rounded-3xl bg-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600"
-        >
-          Submit
-        </button>
-      </div> -->
     </div>
 
     <div
@@ -210,8 +249,12 @@ function nextPage() {
           </tbody>
         </table>
       </div>
-      <div class="border-t border-zinc-800 bg-zinc-900/90 px-5 py-4 text-2xl text-slate-500">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        class="border-t border-zinc-800 bg-zinc-900/90 px-5 py-4 text-2xl text-slate-500"
+      >
+        <div
+          class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
           <span>Menampilkan {{ reports.length }} baris data.</span>
           <div class="flex items-center gap-2 rounded-3xl bg-zinc-950/90 p-2">
             <button
@@ -221,7 +264,9 @@ function nextPage() {
             >
               Prev
             </button>
-            <div class="flex items-center gap-2 px-3 py-2 text-xl text-slate-300">
+            <div
+              class="flex items-center gap-2 px-3 py-2 text-xl text-slate-300"
+            >
               <span class="font-semibold text-slate-100">Page</span>
               <span class="font-semibold text-white">{{ currentPage }}</span>
               <span class="text-slate-400">/</span>
