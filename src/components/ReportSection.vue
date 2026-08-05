@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import * as XLSX from "xlsx";
 
 const startDate = ref("");
 const endDate = ref("");
@@ -9,8 +10,78 @@ const reports = ref([]);
 const loading = ref(false);
 const error = ref("");
 const limit = 10;
+const exportLimit = 100;
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8001";
+function formatDateToISO(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function buildExportRow(row) {
+  return {
+    Waktu: formatWibTime(row.createdAt),
+    "Energy (kWh)": row.kwatt,
+    "Phase 1 (A)": row.arus1,
+    "Phase 2 (A)": row.arus2,
+    "Phase 3 (A)": row.arus3,
+    "Voltage (V)": row.tegangan,
+    "Vibration (Hz)": row.getaran,
+    "Temperature (°C)": row.temp,
+  };
+}
+
+async function fetchAllReports() {
+  const allRows = [];
+  let page = 1;
+  let totalPagesFromApi;
+  const endDateValue = endDate.value || startDate.value;
+
+  while (true) {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(exportLimit),
+    });
+
+    if (startDate.value) {
+      params.set("startDate", startDate.value);
+    }
+
+    if (endDateValue) {
+      params.set("endDate", endDateValue);
+    }
+
+    const response = await fetch(`${apiBaseUrl}/records/paginated?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const body = await response.json();
+    const recordList = body.records || body.data || body;
+    const pageRows = Array.isArray(recordList) ? recordList : [];
+    allRows.push(...pageRows);
+
+    totalPagesFromApi = body.totalPages || body.total_pages;
+    if (totalPagesFromApi != null) {
+      if (page >= Number(totalPagesFromApi)) break;
+    } else if (pageRows.length < exportLimit) {
+      break;
+    }
+
+    page += 1;
+    if (page > 500) break;
+  }
+
+  return allRows;
+}
+
+const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:8001";
+
+const today = formatDateToISO(new Date());
+startDate.value = today;
+endDate.value = today;
+
+onMounted(() => {
+  fetchReports(1);
+});
 
 async function fetchReports(page = 1) {
   loading.value = true;
@@ -31,7 +102,9 @@ async function fetchReports(page = 1) {
   }
 
   try {
-    const response = await fetch(`${apiBaseUrl}/records/paginated?${params.toString()}`);
+    const response = await fetch(
+      `${apiBaseUrl}/records/paginated?${params.toString()}`,
+    );
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -62,8 +135,32 @@ function handleSubmit() {
   fetchReports(1);
 }
 
-function handleExport() {
-  // Nanti tambahkan logika export ke Excel
+async function handleExport() {
+  if (!startDate.value) {
+    error.value = "Pilih tanggal mulai untuk melakukan export.";
+    return;
+  }
+
+  loading.value = true;
+  error.value = "";
+  try {
+    const allRows = await fetchAllReports();
+    if (!allRows.length) {
+      error.value = "Tidak ada data untuk diekspor.";
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(allRows.map(buildExportRow));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Reports");
+
+    const fileName = `report-${startDate.value}-${endDate.value || startDate.value}.xlsx`;
+    XLSX.writeFile(workbook, fileName, { bookType: "xlsx", bookSST: false });
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : String(err);
+  } finally {
+    loading.value = false;
+  }
 }
 
 function goToPage(page) {
@@ -87,6 +184,29 @@ function nextPage() {
     currentPage.value = next;
     fetchReports(next);
   }
+}
+
+function formatWibTime(value) {
+  if (!value) return "--:--";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "--:--";
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Jakarta",
+  })
+    .format(date)
+    .replaceAll(".", ":");
 }
 </script>
 
@@ -146,10 +266,10 @@ function nextPage() {
           >
             <p class="text-2xl">Submit</p>
           </button>
-          <div class="ml-4 self-end text-right text-sm text-slate-400">
+          <!-- <div class="ml-4 self-end text-right text-sm text-slate-400">
             <p v-if="loading">Loading...</p>
             <p v-else-if="error" class="text-rose-400">{{ error }}</p>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -237,14 +357,16 @@ function nextPage() {
               :key="index"
               class="transition hover:bg-zinc-900/80"
             >
-              <td class="px-5 py-4 text-slate-100">{{ row.timestamp }}</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.energy }} kWh</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.phase1 }} A</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.phase2 }} A</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.phase3 }} A</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.voltage }} v</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.vibration }} Hz</td>
-              <td class="px-5 py-4 text-slate-100">{{ row.status }}</td>
+              <td class="px-5 py-4 text-slate-100">
+                {{ formatWibTime(row.createdAt) }}
+              </td>
+              <td class="px-5 py-4 text-slate-100">{{ row.kwatt }} kWh</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.arus1 }} A</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.arus2 }} A</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.arus3 }} A</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.tegangan }} v</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.getaran }} Hz</td>
+              <td class="px-5 py-4 text-slate-100">{{ row.temp }}</td>
             </tr>
           </tbody>
         </table>
@@ -284,4 +406,54 @@ function nextPage() {
       </div>
     </div>
   </section>
+
+  <Transition
+    enter-active-class="transition duration-300"
+    enter-from-class="translate-y-5 opacity-0"
+    enter-to-class="translate-y-0 opacity-100"
+    leave-active-class="transition duration-200"
+    leave-from-class="translate-y-0 opacity-100"
+    leave-to-class="translate-y-5 opacity-0"
+  >
+    <div
+      v-if="error"
+      class="fixed bottom-6 p-2 right-6 z-50 w-[550px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl"
+    >
+      <div class="flex items-start gap-4 p-5">
+        <!-- Icon -->
+        <div
+          class="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-red-500/15 text-red-400"
+        >
+          <svg
+            class="h-16 w-16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M15 9l-6 6" />
+            <path d="M9 9l6 6" />
+          </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1">
+          <p class="text-3xl font-bold text-red-400">Error</p>
+
+          <p class="mt-1 text-2xl text-slate-300">
+            {{ error }}
+          </p>
+        </div>
+
+        <!-- Close -->
+        <button
+          @click="alertData.alert = false"
+          class="rounded-lg text-2xl p-1 text-slate-400 transition hover:bg-zinc-800 hover:text-white"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+  </Transition>
 </template>
