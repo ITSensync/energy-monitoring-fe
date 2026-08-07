@@ -212,46 +212,46 @@ function formatWibTime(value) {
 
 <template>
   <section
-    class="rounded-[2rem] border border-zinc-800 bg-zinc-800 p-6 shadow-[0_28px_100px_-50px_rgba(0,0,0,0.6)]"
+    class="rounded-[2rem] border border-zinc-800 bg-zinc-800 p-4 shadow-[0_28px_100px_-50px_rgba(0,0,0,0.6)] sm:p-6"
   >
     <div
       class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
     >
       <div>
-        <h2 class="mt-2 text-5xl font-semibold tracking-tight text-slate-100">
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-5xl">
           Report Dashboard
         </h2>
-        <p class="mt-1 max-w-5xl text-2xl text-slate-400">
+        <p class="mt-1 max-w-5xl text-base text-slate-400 sm:text-2xl">
           Kosongkan end date untuk menampilkan data rentang satu hari
         </p>
       </div>
     </div>
 
-    <div class="mb-6 gap-4 flex flex-row w-full justify-between">
-      <div class="flex gap-4 w-2/3">
-        <label class="block w-1/3">
-          <span class="mb-2 block text-2xl font-medium text-slate-400"
+    <div class="mb-6 flex w-full flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <div class="flex w-full flex-col gap-4 sm:flex-row">
+        <label class="block w-full sm:w-1/3">
+          <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl"
             >Start Date</span
           >
           <input
             type="date"
             v-model="startDate"
-            class="text-2xl w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
+            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
           />
         </label>
 
-        <label class="block w-1/3">
-          <span class="mb-2 block text-2xl font-medium text-slate-400"
+        <label class="block w-full sm:w-1/3">
+          <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl"
             >End Date</span
           >
           <input
             type="date"
             v-model="endDate"
-            class="text-2xl w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500"
+            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
           />
         </label>
 
-        <div class="flex items-end w-1/3">
+        <div class="flex w-full items-end sm:w-1/3">
           <!-- <button
             type="button"
             @click="handleSubmit"
@@ -262,9 +262,9 @@ function formatWibTime(value) {
           <button
             type="button"
             @click="handleSubmit"
-            class="w-1/2 items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400"
+            class="w-full items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400 sm:w-1/2"
           >
-            <p class="text-2xl">Submit</p>
+            <p class="text-lg sm:text-2xl">Submit</p>
           </button>
           <!-- <div class="ml-4 self-end text-right text-sm text-slate-400">
             <p v-if="loading">Loading...</p>
@@ -273,11 +273,11 @@ function formatWibTime(value) {
         </div>
       </div>
 
-      <div class="flex items-end">
+      <div class="flex w-full items-end xl:w-auto">
         <button
           type="button"
           @click="handleExport"
-          class="inline-flex items-center justify-center rounded-3xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400"
+          class="inline-flex w-full items-center justify-center rounded-3xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400 xl:w-auto"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -309,7 +309,7 @@ function formatWibTime(value) {
               d="M72 170h58l46 72 46-72h58l-74 112 76 112h-58l-48-74-48 74H72l76-112L72 170z"
             />
           </svg>
-          <p class="text-2xl">Export</p>
+          <p class="text-lg sm:text-2xl">Export</p>
         </button>
       </div>
     </div>
@@ -321,7 +321,7 @@ function formatWibTime(value) {
         <table
           class="min-w-full border-separate border-spacing-0 text-left text-sm"
         >
-          <thead class="bg-zinc-900/95 text-slate-400 text-xl">
+          <thead class="bg-zinc-900/95 text-slate-400 text-base sm:text-xl">
             <tr>
               <th
                 class="px-5 py-4 uppercase tracking-[0.18em] text-indigo-400-400"
@@ -351,7 +351,7 @@ function formatWibTime(value) {
               </th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-800 text-2xl">
+          <tbody class="divide-y divide-zinc-800 text-base sm:text-2xl">
             <tr
               v-for="(row, index) in reports"
               :key="index"
@@ -372,7 +372,7 @@ function formatWibTime(value) {
         </table>
       </div>
       <div
-        class="border-t border-zinc-800 bg-zinc-900/90 px-5 py-4 text-2xl text-slate-500"
+        class="border-t border-zinc-800 bg-zinc-900/90 px-3 py-4 text-base text-slate-500 sm:px-5 sm:text-2xl"
       >
         <div
           class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
@@ -382,12 +382,12 @@ function formatWibTime(value) {
             <button
               type="button"
               @click="prevPage"
-              class="rounded-2xl px-3 py-2 text-xl font-medium text-slate-200 transition hover:bg-zinc-800"
+              class="rounded-2xl px-3 py-2 text-base font-medium text-slate-200 transition hover:bg-zinc-800 sm:text-xl"
             >
               Prev
             </button>
             <div
-              class="flex items-center gap-2 px-3 py-2 text-xl text-slate-300"
+              class="flex items-center gap-2 px-3 py-2 text-base text-slate-300 sm:text-xl"
             >
               <span class="font-semibold text-slate-100">Page</span>
               <span class="font-semibold text-white">{{ currentPage }}</span>
@@ -397,7 +397,7 @@ function formatWibTime(value) {
             <button
               type="button"
               @click="nextPage"
-              class="rounded-2xl px-3 py-2 text-xl font-medium text-slate-200 transition hover:bg-zinc-800"
+              class="rounded-2xl px-3 py-2 text-base font-medium text-slate-200 transition hover:bg-zinc-800 sm:text-xl"
             >
               Next
             </button>
@@ -417,7 +417,7 @@ function formatWibTime(value) {
   >
     <div
       v-if="error"
-      class="fixed bottom-6 p-2 right-6 z-50 w-[550px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl"
+      class="fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] max-w-[550px] rounded-2xl border border-red-500/60 bg-zinc-900 shadow-2xl sm:bottom-6 sm:right-6"
     >
       <div class="flex items-start gap-4 p-5">
         <!-- Icon -->

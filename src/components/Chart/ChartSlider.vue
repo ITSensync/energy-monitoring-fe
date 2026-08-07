@@ -9,7 +9,7 @@
     }"
     class="chart-swiper h-full w-full min-w-0 overflow-hidden"
   >
-    <SwiperSlide class="min-w-0 pr-10 pl-12">
+    <SwiperSlide class="min-w-0 pr-1 pl-1">
       <LineChart :chartData="currentData" :chartOptions="chartOptions" />
     </SwiperSlide>
   </Swiper>

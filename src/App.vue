@@ -1,24 +1,24 @@
 <template>
   <main
-    class="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(20,20,20,1),_rgba(10,10,10,1))] text-slate-100 px-10 py-5"
+    class="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(20,20,20,1),_rgba(10,10,10,1))] px-4 py-4 text-slate-100 sm:px-6 lg:px-10 lg:py-5"
   >
-    <div class="mx-auto">
+    <div class="mx-auto max-w-8xl">
       <header
-        class="mb-4 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-6 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.7)]"
+        class="mb-4 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-4 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.7)] sm:p-6"
       >
         <div
           class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <div>
-            <p class="text-2xl uppercase tracking-[0.3em] text-slate-500">
+            <p class="text-sm uppercase tracking-[0.3em] text-slate-500 sm:text-lg">
               Sensync Technology
             </p>
             <h1
-              class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-6xl"
+              class="mt-2 text-xl font-semibold tracking-tight text-slate-100 sm:text-2xl lg:text-4xl"
             >
               Bakery Machine Monitoring System
             </h1>
-            <p class="mt-3 max-w-2xl text-slate-400 sm:text-xl">
+            <p class="mt-3 max-w-2xl text-sm text-slate-400 sm:text-lg">
               Energy & Performance Control Dashboard
             </p>
           </div>
@@ -27,13 +27,13 @@
             <div
               class="flex flex-col gap-3 rounded-3xl bg-zinc-900/90 p-4 text-left shadow-inner shadow-zinc-950/40 sm:min-w-[300px]"
             >
-              <span class="text-xl uppercase tracking-[0.3em] text-slate-500"
+              <span class="text-sm uppercase tracking-[0.3em] text-slate-500 sm:text-lg"
                 >Menu</span
               >
               <select
                 v-model="selectedMenuIndex"
                 @change="selectMenu"
-                class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-slate-100 outline-none focus:border-lime-400 text-2xl"
+                class="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-lg text-slate-100 outline-none transition focus:border-lime-400 sm:text-xl"
               >
                 <option
                   v-for="(menu, index) in menus.menus"

@@ -11,18 +11,31 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import LineChart from "./LineChart.vue";
 
-const gasData = {
-  labels: ["10:00", "10:05", "10:10", "10:15", "10:20", "10:25", "10:30"],
+const props = defineProps({
+  history: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const gasData = computed(() => ({
+  labels: props.history.slice(-12).map((item) => {
+    const date = new Date(item.timestamp || item.createdAt || item.time || Date.now());
+    return Number.isNaN(date.getTime())
+      ? "--"
+      : date.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  }),
   datasets: [
     {
-      label: "Gas",
-      data: [120, 140, 135, 160, 180, 170, 190],
+      label: "Flow (l/min)",
+      data: props.history.slice(-12).map((item) => Number(item.flow ?? item.value ?? 0)),
       borderColor: "#A3E635",
       backgroundColor: "rgba(163,230,53,0.15)",
       tension: 0.4,
@@ -31,7 +44,7 @@ const gasData = {
       pointHoverRadius: 5,
     },
   ],
-};
+}));
 
 const chartOptions = {
   responsive: true,
