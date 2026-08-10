@@ -1,11 +1,13 @@
 <template>
+  <LoginPage v-if="!auth.isLoggedIn" />
   <main
+    v-else
     class="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_rgba(20,20,20,1),_rgba(10,10,10,1))] px-4 py-4 text-slate-100 sm:px-6 lg:px-10 lg:py-5"
   >
     <div class="mx-auto max-w-8xl">
       <header
-        class="mb-4 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-4 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.7)] sm:p-6"
-      >
+          class="mb-4 rounded-[2rem] border border-zinc-800 bg-zinc-800 p-4 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.7)] sm:p-6"
+        >
         <div class="flex flex-col sm:flex-row justify-between gap-4">
           <div class="flex items-center justify-between gap-4">
             <div>
@@ -141,10 +143,15 @@ import { useEnergyStore } from "./stores/useEnergyStore";
 import EnergySection from "./components/EnergySection.vue";
 import GasSection from "./components/GasSection.vue";
 import HeaderConnectivity from "./components/HeaderConnectivity.vue";
+import LoginPage from "./components/LoginPage.vue";
 import { useMenuStore } from "./stores/useMenuStore.js";
+import { useAuthStore } from "./stores/useAuthStore";
 import ReportSection from "./components/ReportSection.vue";
 
 const menus = useMenuStore();
+const auth = useAuthStore();
+
+auth.restoreSession();
 
 const selectedMenuIndex = ref(menus.selectedMenu);
 const mobileMenuOpen = ref(false);
