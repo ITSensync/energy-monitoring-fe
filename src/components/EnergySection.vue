@@ -39,7 +39,7 @@
       </div>
 
       <div class="grid w-full gap-4 xl:w-1/2">
-        <div class="flex h-full w-full flex-col items-stretch gap-4 lg:flex-row">
+        <div class="flex h-full w-full flex-col items-stretch gap-4 md:flex-row">
           <!-- Energy Consumption -->
           <div
             class="relative overflow-hidden w-full h-full rounded-3xl border border-lime-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
@@ -48,7 +48,7 @@
               class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-lime-400"
             ></div>
             <p
-              class="text-lg font-bold uppercase tracking-[0.3em] text-lime-400 sm:text-xl"
+              class="text-lg font-bold uppercase tracking-[0.3em] text-lime-400 lg:text-xl"
             >
               Energy Consumption
             </p>
@@ -67,7 +67,7 @@
                   >Stabil</span
                 > -->
               </div>
-              <div class="mt-7 flex justify-between text-xl">
+              <div class="mt-7 flex justify-between text-base sm:text-lg">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -100,7 +100,7 @@
                   >Stabil</span
                 > -->
               </div>
-              <div class="mt-7 flex justify-between text-xl">
+              <div class="mt-7 flex justify-between text-base sm:text-lg">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div class="flex flex-col gap-4 w-full lg:flex-row">
+        <div class="flex flex-col gap-4 w-full md:flex-row">
           <!-- Vibration -->
           <div
             class="relative overflow-hidden flex h-full min-w-0 w-full flex-col rounded-[2rem] border border-sky-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
@@ -130,7 +130,7 @@
                   {{ latestAverage.vibration }} <sub class="text-xl sm:text-2xl">Hz</sub>
                 </p>
               </div>
-              <div class="mt-5 flex flex-col gap-2 text-base sm:flex-row sm:justify-between sm:text-lg w-full">
+              <div class="mt-5 flex text-base justify-between sm:text-lg w-full">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -188,7 +188,7 @@
                     </svg>
                   </span>
                   <div class="min-w-0">
-                    <p class="truncate text-lg font-semibold text-slate-100 sm:text-2xl">
+                    <p class="truncate text-lg font-semibold text-slate-100 sm:text-xl lg:text-2xl">
                       {{ status.text }}
                     </p>
                     <!-- <p class="text-lg text-slate-400">{{ status.value }}</p> -->
@@ -269,7 +269,7 @@
 
       <div class="flex flex-col gap-4 lg:flex-row">
         <div
-          class="relative min-h-[320px] w-full overflow-hidden rounded-3xl border border-orange-400/15 bg-zinc-800 p-4 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] sm:p-5 lg:w-1/2"
+          class="relative min-h-[360px] md:min-h-[320px] w-full overflow-hidden rounded-3xl border border-orange-400/15 bg-zinc-800 p-4 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] sm:p-5 lg:w-1/2"
         >
           <div
             class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-orange-400"
@@ -282,7 +282,7 @@
                 >
                   OPERATING TIME TODAY
                 </p>
-                <p class="text-lg font-semibold text-slate-100 sm:text-4xl lg:text-6xl">
+                <p class="text-3xl font-semibold text-slate-100 sm:text-4xl lg:text-6xl">
                   {{ formatTextMinutes(runtimeData.today) }}
                 </p>
               </div>
@@ -294,7 +294,7 @@
                 >
                   Minute
                 </span>
-                <span class="block text-xl xl:text-4xl font-semibold text-orange-300">
+                <span class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300">
                   {{ runtimeData.today }}
                 </span>
               </div>
@@ -308,7 +308,7 @@
                     Total Operating Time
                   </p>
                   <p
-                    class="mt-3 text-lg font-semibold leading-none text-slate-100 sm:text-4xl lg:text-6xl"
+                    class="mt-3 text-3xl font-semibold leading-none text-slate-100 sm:text-4xl lg:text-6xl"
                   >
                     {{ formatTextMinutes(runtimeData.allTime) }}
                   </p>
@@ -321,7 +321,7 @@
                   >
                     Minute
                   </span>
-                  <span class="block text-xl xl:text-4xl font-semibold text-orange-300">
+                  <span class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300">
                     {{ runtimeData.allTime }}
                   </span>
                 </div>

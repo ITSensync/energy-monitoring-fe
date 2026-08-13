@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import BarChart from "./BarChart.vue";
 
 const props = defineProps({
@@ -11,6 +11,20 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+});
+
+const windowWidth = ref(window.innerWidth);
+
+function handleResize() {
+  windowWidth.value = window.innerWidth;
+}
+
+onMounted(() => {
+  window.addEventListener("resize", handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
 });
 
 const fallbackWeeklyData = [
@@ -56,53 +70,69 @@ const chartData = computed(() => {
   };
 });
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      labels: {
-        color: "#e2e8f0",
+const chartOptions = computed(() => {
+  const width = windowWidth.value;
+
+  let fontSize;
+
+  if (width < 640) {
+    fontSize = 10;
+  } else if (width < 1024) {
+    fontSize = 14;
+  } else {
+    fontSize = 18;
+  }
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: "#e2e8f0",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+          boxWidth: width < 640 ? 12 : 20,
+          boxHeight: width < 640 ? 6 : 10,
+        },
+      },
+      datalabels: {
+        anchor: "end",
+        align: "top",
+        color: "#94a3b8",
         font: {
-          size: 20,
+          size: Math.max(fontSize + 2, 12),
           weight: "bold",
-        }
+        },
+        formatter: (value) => `${value} h`,
       },
     },
-    datalabels: {
-      anchor: "end",     // posisi relatif ke bar
-      align: "top",      // taruh di atas bar
-      color: "#94a3b8",
-      font: {
-        size: 22,
-        weight: "bold"
+    scales: {
+      x: {
+        ticks: {
+          color: "#94a3b8",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+        },
       },
-      formatter: (value) => `${value} h`
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: "#94a3b8",
-        font: {
-          size: 20,      // Ukuran angka sumbu X
-          weight: "bold"
-        }
+      y: {
+        ticks: {
+          color: "#94a3b8",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+        },
+        beginAtZero: true,
+        max: 24,
       },
     },
-    y: {
-      ticks: {
-        color: "#94a3b8",
-        font: {
-          size: 20,
-          weight: "bold"
-        }
-      },
-      beginAtZero: true,
-      max: 24,
-    },
-  },
-};
+  };
+});
 
 function minutesToCappedHours(value) {
   const minutes = Number(value);

@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -34,91 +34,139 @@ const props = defineProps({
 const currentData = computed(() => ({
   labels: props.todayAverageData.map((item) => formatWibTime(item.createdAt)),
   datasets: [
-    buildPhaseDataset("Phase 1", "arus1", 1, "#A3E635", "rgba(163,230,53,0.12)"),
-    buildPhaseDataset("Phase 2", "arus2", 1.7, "#F66D9B", "rgba(246,109,155,0.12)"),
-    buildPhaseDataset("Phase 3", "arus3", 0.5, "#38BDF8", "rgba(56,189,248,0.12)"),
+    buildPhaseDataset(
+      "Phase 1",
+      "arus1",
+      1,
+      "#A3E635",
+      "rgba(163,230,53,0.12)",
+    ),
+    buildPhaseDataset(
+      "Phase 2",
+      "arus2",
+      1.7,
+      "#F66D9B",
+      "rgba(246,109,155,0.12)",
+    ),
+    buildPhaseDataset(
+      "Phase 3",
+      "arus3",
+      0.5,
+      "#38BDF8",
+      "rgba(56,189,248,0.12)",
+    ),
   ],
 }));
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    // datalabels: {
-    //   color: "#aaaaaa",
-    //   font: {
-    //     size: 18,
-    //     weight: "bold",
-    //   },
-    // },
-    legend: {
-      labels: {
-        color: "#ffffff",
-        font: {
-          size: 20, // Ukuran tulisan legend
-          weight: "bold",
-        },
-        boxWidth: 20,
-        boxHeight: 10,
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: {
-        color: "#94a3b8",
-        font: {
-          size: 18, // Ukuran angka sumbu X
-          weight: "bold",
-        },
-      },
-      title: {
-        display: true,
-        text: "Time", // label sumbu X
-        color: "#94a3b8",
-        font: {
-          size: 24, // ukuran font
-          weight: "bold", // normal | bold | 500 | 700
-          // style: "italic", // normal | italic
-          family: "Arial", // font family
-          lineHeight: 1.2,
-        },
-      },
-      grid: {
-        color: "rgba(255,255,255,0.05)",
-      },
-    },
-    y: {
-      ticks: {
-        color: "#94a3b8",
-        font: {
-          size: 18, // Ukuran angka sumbu Y
-          weight: "bold",
-        },
-      },
-      title: {
-        display: true,
-        text: "Ampere (A)", // label sumbu X
-        color: "#94a3b8",
-        font: {
-          size: 24, // ukuran font
-          weight: "bold", // normal | bold | 500 | 700
-          // style: "italic", // normal | italic
-          family: "Arial", // font family
-          lineHeight: 1.2,
-        },
-      },
-      grid: {
-        color: "rgba(255,255,255,0.05)",
-      },
-    },
-  },
-};
+const chartOptions = computed(() => {
+  const width = windowWidth.value;
 
-function buildPhaseDataset(label, key, multiplier, borderColor, backgroundColor) {
+  let fontSize;
+  let titleFontSize;
+
+  if (width < 640) {
+    // Mobile
+    fontSize = 10;
+    titleFontSize = 12;
+  } else if (width < 1024) {
+    // Tablet
+    fontSize = 14;
+    titleFontSize = 18;
+  } else {
+    // Desktop
+    fontSize = 18;
+    titleFontSize = 24;
+  }
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    plugins: {
+      datalabels: {
+        display: false,
+      },
+
+      legend: {
+        labels: {
+          color: "#ffffff",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+          boxWidth: width < 640 ? 12 : 20,
+          boxHeight: width < 640 ? 6 : 10,
+        },
+      },
+    },
+
+    scales: {
+      x: {
+        ticks: {
+          color: "#94a3b8",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+          maxRotation: 0,
+        },
+
+        title: {
+          display: true,
+          text: "Time",
+          color: "#94a3b8",
+          font: {
+            size: titleFontSize,
+            weight: "bold",
+            family: "Arial",
+          },
+        },
+
+        grid: {
+          color: "rgba(255,255,255,0.05)",
+        },
+      },
+
+      y: {
+        ticks: {
+          color: "#94a3b8",
+          font: {
+            size: fontSize,
+            weight: "bold",
+          },
+        },
+
+        title: {
+          display: true,
+          text: "Ampere (A)",
+          color: "#94a3b8",
+          font: {
+            size: titleFontSize,
+            weight: "bold",
+            family: "Arial",
+          },
+        },
+
+        grid: {
+          color: "rgba(255,255,255,0.05)",
+        },
+      },
+    },
+  };
+});
+
+function buildPhaseDataset(
+  label,
+  key,
+  multiplier,
+  borderColor,
+  backgroundColor,
+) {
   return {
     label,
-    data: props.todayAverageData.map((item) => toScaledNumber(item[key], multiplier)),
+    data: props.todayAverageData.map((item) =>
+      toScaledNumber(item[key], multiplier),
+    ),
     borderColor,
     backgroundColor,
     tension: 0.4,
@@ -151,6 +199,20 @@ function formatWibTime(value) {
     .format(date)
     .replace(".", ":");
 }
+
+const windowWidth = ref(window.innerWidth);
+
+function handleResize() {
+  windowWidth.value = window.innerWidth;
+}
+
+onMounted(() => {
+  window.addEventListener("resize", handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
+});
 </script>
 
 <style>

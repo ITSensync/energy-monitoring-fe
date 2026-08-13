@@ -1,13 +1,16 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import * as XLSX from "xlsx";
 
 const startDate = ref("");
 const endDate = ref("");
 const currentPage = ref(1);
+const pageInput = ref("1");
 const totalPages = ref(1);
 const reports = ref([]);
 const loading = ref(false);
+const submitLoading = ref(false);
+const exportLoading = ref(false);
 const error = ref("");
 const limit = 10;
 const exportLimit = 100;
@@ -18,7 +21,7 @@ function formatDateToISO(date) {
 
 function buildExportRow(row) {
   return {
-    Waktu: formatWibTime(row.createdAt),
+    Waktu: formatWibTime(row._terminalTime),
     "Energy (kWh)": row.kwatt,
     "Phase 1 (A)": row.arus1,
     "Phase 2 (A)": row.arus2,
@@ -49,7 +52,9 @@ async function fetchAllReports() {
       params.set("endDate", endDateValue);
     }
 
-    const response = await fetch(`${apiBaseUrl}/records/paginated?${params.toString()}`);
+    const response = await fetch(
+      `${apiBaseUrl}/records/paginated?${params.toString()}`,
+    );
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -84,6 +89,8 @@ onMounted(() => {
 });
 
 async function fetchReports(page = 1) {
+  if (loading.value) return;
+
   loading.value = true;
   error.value = "";
 
@@ -100,6 +107,8 @@ async function fetchReports(page = 1) {
   if (endDateValue) {
     params.set("endDate", endDateValue);
   }
+
+  console.log(params.toString());
 
   try {
     const response = await fetch(
@@ -130,17 +139,50 @@ async function fetchReports(page = 1) {
   }
 }
 
-function handleSubmit() {
-  currentPage.value = 1;
-  fetchReports(1);
+watch(currentPage, (value) => {
+  pageInput.value = String(value);
+});
+
+async function handleSubmit() {
+  if (submitLoading.value || loading.value) return;
+
+  submitLoading.value = true;
+  error.value = "";
+
+  try {
+    currentPage.value = 1;
+    await fetchReports(1);
+  } finally {
+    submitLoading.value = false;
+  }
+}
+
+function jumpToPage() {
+  const typedPage = Number(pageInput.value);
+
+  if (!Number.isFinite(typedPage)) {
+    pageInput.value = String(currentPage.value);
+    return;
+  }
+
+  const safePage = Math.min(Math.max(1, Math.trunc(typedPage)), totalPages.value);
+
+  pageInput.value = String(safePage);
+  if (safePage !== currentPage.value) {
+    currentPage.value = safePage;
+    fetchReports(safePage);
+  }
 }
 
 async function handleExport() {
+  if (exportLoading.value || loading.value) return;
+
   if (!startDate.value) {
     error.value = "Pilih tanggal mulai untuk melakukan export.";
     return;
   }
 
+  exportLoading.value = true;
   loading.value = true;
   error.value = "";
   try {
@@ -159,6 +201,7 @@ async function handleExport() {
   } catch (err) {
     error.value = err instanceof Error ? err.message : String(err);
   } finally {
+    exportLoading.value = false;
     loading.value = false;
   }
 }
@@ -218,7 +261,9 @@ function formatWibTime(value) {
       class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
     >
       <div>
-        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-5xl">
+        <h2
+          class="mt-2 text-3xl font-semibold tracking-tight text-slate-100 sm:text-5xl"
+        >
           Report Dashboard
         </h2>
         <p class="mt-1 max-w-5xl text-base text-slate-400 sm:text-2xl">
@@ -227,73 +272,118 @@ function formatWibTime(value) {
       </div>
     </div>
 
-    <div class="mb-6 flex w-full flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-      <div class="flex w-full flex-col gap-4 sm:flex-row">
-        <label class="block w-full sm:w-1/3">
-          <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl"
-            >Start Date</span
-          >
-          <input
-            type="date"
-            v-model="startDate"
-            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
-          />
-        </label>
+    <div class="mb-6 flex w-full flex-col gap-4 xl:flex-row xl:items-end">
+      <!-- Start Date -->
+      <label class="block w-full xl:flex-1">
+        <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl">
+          Start Date
+        </span>
 
-        <label class="block w-full sm:w-1/3">
-          <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl"
-            >End Date</span
-          >
-          <input
-            type="date"
-            v-model="endDate"
-            class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
-          />
-        </label>
+        <input
+          type="date"
+          v-model="startDate"
+          class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
+        />
+      </label>
 
-        <div class="flex w-full items-end sm:w-1/3">
-          <!-- <button
-            type="button"
-            @click="handleSubmit"
-            class="w-full rounded-3xl bg-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600"
-          >
-            Submit
-          </button> -->
-          <button
-            type="button"
-            @click="handleSubmit"
-            class="w-full items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400 sm:w-1/2"
-          >
-            <p class="text-lg sm:text-2xl">Submit</p>
-          </button>
-          <!-- <div class="ml-4 self-end text-right text-sm text-slate-400">
-            <p v-if="loading">Loading...</p>
-            <p v-else-if="error" class="text-rose-400">{{ error }}</p>
-          </div> -->
-        </div>
-      </div>
+      <!-- End Date -->
+      <label class="block w-full xl:flex-1">
+        <span class="mb-2 block text-lg font-medium text-slate-400 sm:text-2xl">
+          End Date
+        </span>
 
-      <div class="flex w-full items-end xl:w-auto">
+        <input
+          type="date"
+          v-model="endDate"
+          class="w-full rounded-2xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-lg text-slate-100 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-lime-500 sm:text-2xl"
+        />
+      </label>
+
+      <!-- Submit -->
+      <div class="w-full xl:flex-1">
         <button
           type="button"
-          @click="handleExport"
-          class="inline-flex w-full items-center justify-center rounded-3xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400 xl:w-auto"
+          :disabled="submitLoading || loading"
+          @click="handleSubmit"
+          class="flex w-full items-center justify-center gap-3 rounded-2xl bg-sky-500 px-5 py-3 text-lg font-semibold text-white transition hover:bg-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-300 disabled:cursor-not-allowed disabled:opacity-70 sm:text-2xl"
         >
           <svg
+            v-if="submitLoading"
+            class="h-5 w-5 animate-spin sm:h-6 sm:w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-opacity="0.35"
+            />
+            <path
+              d="M21 12a9 9 0 0 0-9-9"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          {{ submitLoading ? "Loading..." : "Submit" }}
+        </button>
+      </div>
+
+      <!-- Export -->
+      <div class="w-full xl:w-auto xl:shrink-0">
+        <button
+          type="button"
+          :disabled="exportLoading || loading"
+          @click="handleExport"
+          class="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-emerald-500 px-5 py-3 text-lg font-semibold text-white transition hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-70 sm:text-2xl xl:w-auto"
+        >
+          <svg
+            v-if="exportLoading"
+            class="h-5 w-5 animate-spin sm:h-6 sm:w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-opacity="0.35"
+            />
+            <path
+              d="M21 12a9 9 0 0 0-9-9"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg
+            v-else
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
-            width="30px"
-            height="30px"
-            class="mr-2"
+            width="28"
+            height="28"
+            class="shrink-0"
+            aria-hidden="true"
           >
             <!-- Background Shield -->
             <path
               fill="#107C41"
               d="M64 32h256l128 128v288a64 64 0 0 1-64 64H64a64 64 0 0 1-64-64V96a64 64 0 0 1 64-64z"
             />
-            <!-- Folded Corner Effect -->
+
+            <!-- Folded Corner -->
             <path fill="#0E6533" d="M320 32v128h128L320 32z" />
-            <!-- Grid Squares -->
+
+            <!-- Grid -->
             <rect fill="#1F8A4E" x="128" y="210" width="64" height="64" />
             <rect fill="#1F8A4E" x="208" y="210" width="64" height="64" />
             <rect fill="#1F8A4E" x="288" y="210" width="64" height="64" />
@@ -303,13 +393,15 @@ function formatWibTime(value) {
             <rect fill="#1F8A4E" x="128" y="370" width="64" height="64" />
             <rect fill="#28A154" x="208" y="370" width="64" height="64" />
             <rect fill="#33B360" x="288" y="370" width="64" height="64" />
-            <!-- White "X" Emblem -->
+
+            <!-- X -->
             <path
               fill="#FFFFFF"
               d="M72 170h58l46 72 46-72h58l-74 112 76 112h-58l-48-74-48 74H72l76-112L72 170z"
             />
           </svg>
-          <p class="text-lg sm:text-2xl">Export</p>
+
+          {{ exportLoading ? "Exporting..." : "Export" }}
         </button>
       </div>
     </div>
@@ -358,7 +450,7 @@ function formatWibTime(value) {
               class="transition hover:bg-zinc-900/80"
             >
               <td class="px-5 py-4 text-slate-100">
-                {{ formatWibTime(row.createdAt) }}
+                {{ formatWibTime(row._terminalTime) }}
               </td>
               <td class="px-5 py-4 text-slate-100">{{ row.kwatt }} kWh</td>
               <td class="px-5 py-4 text-slate-100">{{ row.arus1 }} A</td>
@@ -387,10 +479,20 @@ function formatWibTime(value) {
               Prev
             </button>
             <div
-              class="flex items-center gap-2 px-3 py-2 text-base text-slate-300 sm:text-xl"
+              class="flex items-center gap-2 rounded-2xl px-2 py-2 text-base text-slate-300 sm:text-xl"
             >
-              <span class="font-semibold text-slate-100">Page</span>
-              <span class="font-semibold text-white">{{ currentPage }}</span>
+              <label class="flex items-center gap-2">
+                <span class="font-semibold text-slate-100">Page</span>
+                <input
+                  v-model="pageInput"
+                  type="number"
+                  min="1"
+                  :max="totalPages"
+                  class="w-16 rounded-xl bg-zinc-900 px-2 py-1 text-center text-base font-semibold text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500 sm:text-xl"
+                  @keydown.enter="jumpToPage"
+                  @blur="jumpToPage"
+                />
+              </label>
               <span class="text-slate-400">/</span>
               <span class="text-slate-300">{{ totalPages }}</span>
             </div>
