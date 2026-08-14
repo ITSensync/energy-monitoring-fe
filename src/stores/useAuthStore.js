@@ -65,7 +65,7 @@ export const useAuthStore = defineStore("auth", {
         saveSession({
           username: user.username,
           displayName: user.displayName,
-          expiresAt: Date.now() + 12 * 60 * 60 * 1000,
+          expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         });
 
         return true;

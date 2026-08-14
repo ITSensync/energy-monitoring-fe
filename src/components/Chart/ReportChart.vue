@@ -1,59 +1,37 @@
 <template>
-  <Swiper
-    :modules="[Autoplay, Navigation]"
-    :slides-per-view="1"
-    :navigation="true"
-    :autoplay="{
-      delay: 15000,
-      disableOnInteraction: false,
-    }"
-    class="chart-swiper h-full w-full min-w-0 overflow-hidden"
-  >
-    <SwiperSlide class="min-w-0 pr-1 pl-1">
-      <LineChart :chartData="currentData" :chartOptions="chartOptions" />
-    </SwiperSlide>
-  </Swiper>
+  <div ref="chartContainerRef" class="h-full w-full min-w-0 py-1 px-4">
+    <LineChart :chartData="currentData" :chartOptions="chartOptions" />
+  </div>
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { computed, onBeforeUnmount, onMounted, ref, nextTick } from "vue";
 import LineChart from "./LineChart.vue";
 
 const props = defineProps({
-  todayAverageData: {
+  chartData: {
     type: Array,
     default: () => [],
   },
+  parameter: {
+    type: String,
+    default: "",
+  },
 });
 
+const chartContainerRef = ref(null);
+
+const parameterMeta = computed(() => getParameterMeta(props.parameter));
+
 const currentData = computed(() => ({
-  labels: props.todayAverageData.map((item) => formatWibTime(item.createdAt)),
+  labels: props.chartData.map((item) => formatWibTime(item._terminalTime)),
   datasets: [
     buildPhaseDataset(
-      "Phase 1",
-      "arus1",
+      parameterMeta.value.label,
+      props.parameter,
       1,
-      "#A3E635",
-      "rgba(163,230,53,0.12)",
-    ),
-    buildPhaseDataset(
-      "Phase 2",
-      "arus2",
-      1,
-      "#F66D9B",
-      "rgba(246,109,155,0.12)",
-    ),
-    buildPhaseDataset(
-      "Phase 3",
-      "arus3",
-      1,
-      "#38BDF8",
-      "rgba(56,189,248,0.12)",
+      parameterMeta.value.color,
+      parameterMeta.value.fillColor,
     ),
   ],
 }));
@@ -138,7 +116,7 @@ const chartOptions = computed(() => {
 
         title: {
           display: true,
-          text: "Ampere (A)",
+          text: parameterMeta.value.axisLabel,
           color: "#94a3b8",
           font: {
             size: titleFontSize,
@@ -164,9 +142,7 @@ function buildPhaseDataset(
 ) {
   return {
     label,
-    data: props.todayAverageData.map((item) =>
-      toScaledNumber(item[key], multiplier),
-    ),
+    data: props.chartData.map((item) => toScaledNumber(item[key], multiplier)),
     borderColor,
     backgroundColor,
     tension: 0.4,
@@ -174,6 +150,62 @@ function buildPhaseDataset(
     pointRadius: 3,
     pointHoverRadius: 5,
   };
+}
+
+function getParameterMeta(parameter) {
+  const map = {
+    arus1: {
+      label: "Arus 1",
+      axisLabel: "Arus 1 (A)",
+      color: "#A3E635",
+      fillColor: "rgba(163, 230, 53, 0.12)",
+    },
+    arus2: {
+      label: "Arus 2",
+      axisLabel: "Arus 2 (A)",
+      color: "#F66D9B",
+      fillColor: "rgba(246, 109, 155, 0.12)",
+    },
+    arus3: {
+      label: "Arus 3",
+      axisLabel: "Arus 3 (A)",
+      color: "#38BDF8",
+      fillColor: "rgba(56, 189, 248, 0.12)",
+    },
+    tegangan: {
+      label: "Tegangan",
+      axisLabel: "Tegangan (V)",
+      color: "#F59E0B",
+      fillColor: "rgba(245, 158, 11, 0.12)",
+    },
+    kwatt: {
+      label: "Energy",
+      axisLabel: "Energy (kWh)",
+      color: "#34D399",
+      fillColor: "rgba(52, 211, 153, 0.12)",
+    },
+    temp: {
+      label: "Suhu",
+      axisLabel: "Suhu (°C)",
+      color: "#FB7185",
+      fillColor: "rgba(251, 113, 133, 0.12)",
+    },
+    getaran: {
+      label: "Getaran",
+      axisLabel: "Getaran (Hz)",
+      color: "#8B5CF6",
+      fillColor: "rgba(139, 92, 246, 0.12)",
+    },
+  };
+
+  return (
+    map[parameter] || {
+      label: "Parameter",
+      axisLabel: "Value",
+      color: "#A3E635",
+      fillColor: "rgba(163, 230, 53, 0.12)",
+    }
+  );
 }
 
 function toScaledNumber(value, multiplier) {
@@ -206,6 +238,23 @@ function handleResize() {
   windowWidth.value = window.innerWidth;
 }
 
+async function exportChartAsPng() {
+  await nextTick();
+
+  const canvas = chartContainerRef.value?.querySelector("canvas");
+  if (!canvas) return;
+
+  const link = document.createElement("a");
+  const fileName = `${(props.parameter || "chart").toUpperCase()}-${new Date()
+    .toISOString()
+    .slice(0, 19)
+    .replace(/[:T]/g, "-")}.png`;
+
+  link.href = canvas.toDataURL("image/png");
+  link.download = fileName;
+  link.click();
+}
+
 onMounted(() => {
   window.addEventListener("resize", handleResize);
 });
@@ -213,6 +262,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
 });
+
+defineExpose({ exportChartAsPng });
 </script>
 
 <style>

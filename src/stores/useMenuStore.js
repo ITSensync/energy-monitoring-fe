@@ -11,6 +11,10 @@ export const useMenuStore = defineStore('menu', {
       {
         name: 'Report',
         icon: 'mdi-file-chart',
+      },
+      {
+        name: 'Graph',
+        icon: "",
       }
     ]
   }),

@@ -538,8 +538,8 @@ const alarmRules = [
   },
 ];
 
-const alarmStatusList = computed(() =>
-  alarmRules
+const alarmStatusList = computed(() => {
+  const activeAlarms = alarmRules
     .filter((rule) => {
       const value = Number(rule.getValue(latestAverage.value) ?? 0);
       return rule.isAlarm(value);
@@ -554,8 +554,22 @@ const alarmStatusList = computed(() =>
         level: "alarm",
         text: rule.text,
       };
-    }),
-);
+    });
+
+  if (activeAlarms.length === 0) {
+    return [
+      {
+        key: "system-ok",
+        label: "System",
+        value: "Under Control",
+        level: "normal",
+        text: "System OK",
+      },
+    ];
+  }
+
+  return activeAlarms;
+});
 
 // console.log(runtimeData.value)
 
