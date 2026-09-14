@@ -35,26 +35,26 @@ const currentData = computed(() => ({
   labels: props.todayAverageData.map((item) => formatWibTime(item.createdAt)),
   datasets: [
     buildPhaseDataset(
-      "Phase 1",
-      "arus1",
+      "Power Consumption",
+      "kwatt",
       1,
       "#A3E635",
       "rgba(163,230,53,0.12)",
     ),
-    buildPhaseDataset(
-      "Phase 2",
-      "arus2",
-      1,
-      "#F66D9B",
-      "rgba(246,109,155,0.12)",
-    ),
-    buildPhaseDataset(
-      "Phase 3",
-      "arus3",
-      1,
-      "#38BDF8",
-      "rgba(56,189,248,0.12)",
-    ),
+    // buildPhaseDataset(
+    //   "Phase 2",
+    //   "arus2",
+    //   1,
+    //   "#F66D9B",
+    //   "rgba(246,109,155,0.12)",
+    // ),
+    // buildPhaseDataset(
+    //   "Phase 3",
+    //   "arus3",
+    //   1,
+    //   "#38BDF8",
+    //   "rgba(56,189,248,0.12)",
+    // ),
   ],
 }));
 
@@ -138,7 +138,7 @@ const chartOptions = computed(() => {
 
         title: {
           display: true,
-          text: "Ampere (A)",
+          text: "Kwatt (kW)",
           color: "#94a3b8",
           font: {
             size: titleFontSize,

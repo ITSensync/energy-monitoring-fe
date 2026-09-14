@@ -6,10 +6,14 @@
       <div
         class="min-w-0 w-full rounded-[2rem] border border-zinc-800 bg-zinc-800 p-4 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] min-h-[320px] sm:p-6 xl:w-2/3"
       >
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div>
-            <h2 class="mt-2 text-sm font-extrabold text-slate-100 sm:text-3xl lg:text-3xl">
-              Realtime Motor Current (3 Phase)
+            <h2
+              class="mt-2 text-sm font-extrabold text-slate-100 sm:text-3xl lg:text-3xl"
+            >
+              Realtime Motor Power
             </h2>
           </div>
 
@@ -39,78 +43,98 @@
       </div>
 
       <div class="grid w-full gap-4 xl:w-1/2">
-        <div class="flex h-full w-full flex-col items-stretch gap-4 md:flex-row">
+        <div
+          class="flex h-full w-full flex-col items-stretch gap-4 md:flex-row"
+        >
           <!-- Energy Consumption -->
           <div
-            class="relative overflow-hidden w-full h-full rounded-3xl border border-lime-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+            class="relative overflow-hidden w-full h-full rounded-3xl border border-sky-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
           >
             <div
-              class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-lime-400"
+              class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-sky-400"
             ></div>
             <p
-              class="text-lg font-bold uppercase tracking-[0.3em] text-lime-400 lg:text-xl"
+              class="text-lg font-bold uppercase tracking-[0.3em] text-sky-400 lg:text-xl"
             >
-              Energy Consumption
+              Phase
             </p>
-            <div
-              class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6"
-            >
-              <div class="flex w-full items-center justify-between gap-4">
-                <div>
-                  <p class="text-lg text-slate-400 sm:text-2xl">Consumption Value</p>
-                  <p class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl">
-                    {{ latestAverage.kwatt }} <sub class="text-2xl sm:text-3xl">kWh</sub>
-                  </p>
+            <div class="mt-2 flex flex-col gap-4 md:flex-row">
+              <div
+                class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6 w-full"
+              >
+                <div class="flex w-full items-center justify-between gap-4">
+                  <div>
+                    <p class="text-lg text-slate-400 sm:text-2xl">Phase 1</p>
+                    <p
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                    >
+                      {{ latestAverage.arus1 }}
+                      <sub class="text-2xl sm:text-3xl">A</sub>
+                    </p>
+                  </div>
+                  <!-- <span
+                    class="rounded-full bg-lime-400 px-4 py-2 text-md font-bold text-zinc-900"
+                    >Stabil</span
+                  > -->
                 </div>
-                <!-- <span
-                  class="rounded-full bg-lime-400 px-4 py-2 text-md font-bold text-zinc-900"
-                  >Stabil</span
-                > -->
+                <!-- <div class="mt-7 flex justify-between text-base sm:text-lg">
+                  <p>Last Update</p>
+                  <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
+                </div> -->
               </div>
-              <div class="mt-7 flex justify-between text-base sm:text-lg">
-                <p>Last Update</p>
-                <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
+              <div
+                class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6 w-full"
+              >
+                <div class="flex w-full items-center justify-between gap-4">
+                  <div>
+                    <p class="text-lg text-slate-400 sm:text-2xl">Phase 2</p>
+                    <p
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                    >
+                      {{ latestAverage.arus2 }}
+                      <sub class="text-2xl sm:text-3xl">A</sub>
+                    </p>
+                  </div>
+                  <!-- <span
+                    class="rounded-full bg-lime-400 px-4 py-2 text-md font-bold text-zinc-900"
+                    >Stabil</span
+                  > -->
+                </div>
+                <!-- <div class="mt-7 flex justify-between text-base sm:text-lg">
+                  <p>Last Update</p>
+                  <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
+                </div> -->
+              </div>
+              <div
+                class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6 w-full"
+              >
+                <div class="flex w-full items-center justify-between gap-4">
+                  <div>
+                    <p class="text-lg text-slate-400 sm:text-2xl">Phase 3</p>
+                    <p
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                    >
+                      {{ latestAverage.arus3 }}
+                      <sub class="text-2xl sm:text-3xl">A</sub>
+                    </p>
+                  </div>
+                  <!-- <span
+                    class="rounded-full bg-lime-400 px-4 py-2 text-md font-bold text-zinc-900"
+                    >Stabil</span
+                  > -->
+                </div>
               </div>
             </div>
-          </div>
-          <!-- VOLTASE CARD -->
-          <div
-            class="relative overflow-hidden w-full h-full rounded-3xl border border-rose-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
-          >
-            <div
-              class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-rose-400"
-            ></div>
-            <p
-              class="text-lg font-bold uppercase tracking-[0.3em] text-rose-400 sm:text-xl"
-            >
-              Voltage
-            </p>
-            <div
-              class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6"
-            >
-              <div class="flex w-full items-center justify-between gap-4">
-                <div>
-                  <p class="text-lg text-slate-400 sm:text-2xl">System</p>
-                  <p class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl">
-                    {{ latestAverage.volt }} <sub class="text-xl sm:text-2xl">V</sub>
-                  </p>
-                </div>
-                <!-- <span
-                  class="rounded-full bg-rose-400 px-4 py-2 text-md font-bold text-zinc-900"
-                  >Stabil</span
-                > -->
-              </div>
-              <div class="mt-7 flex justify-between text-base sm:text-lg">
-                <p>Last Update</p>
-                <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
-              </div>
+            <div class="mt-4 px-6 flex justify-between text-base sm:text-lg">
+              <p>Last Update</p>
+              <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
             </div>
           </div>
         </div>
 
         <div class="flex flex-col gap-4 w-full md:flex-row">
           <!-- Vibration -->
-          <div
+          <!-- <div
             class="relative overflow-hidden flex h-full min-w-0 w-full flex-col rounded-[2rem] border border-sky-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
           >
             <div
@@ -131,6 +155,43 @@
                 </p>
               </div>
               <div class="mt-5 flex text-base justify-between sm:text-lg w-full">
+                <p>Last Update</p>
+                <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- VOLTASE CARD -->
+          <div
+            class="relative overflow-hidden w-full h-full rounded-3xl border border-rose-400/15 bg-zinc-800 p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+          >
+            <div
+              class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-rose-400"
+            ></div>
+            <p
+              class="text-lg font-bold uppercase tracking-[0.3em] text-rose-400 sm:text-xl"
+            >
+              Voltage
+            </p>
+            <div
+              class="mt-6 rounded-3xl border border-zinc-800 bg-zinc-900/95 p-6"
+            >
+              <div class="flex w-full items-center justify-between gap-4">
+                <div>
+                  <p class="text-lg text-slate-400 sm:text-2xl">System</p>
+                  <p
+                    class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                  >
+                    {{ latestAverage.volt }}
+                    <sub class="text-xl sm:text-2xl">V</sub>
+                  </p>
+                </div>
+                <!-- <span
+                  class="rounded-full bg-rose-400 px-4 py-2 text-md font-bold text-zinc-900"
+                  >Stabil</span
+                > -->
+              </div>
+              <div class="mt-7 flex justify-between text-base sm:text-lg">
                 <p>Last Update</p>
                 <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
               </div>
@@ -188,7 +249,9 @@
                     </svg>
                   </span>
                   <div class="min-w-0">
-                    <p class="truncate text-lg font-semibold text-slate-100 sm:text-xl lg:text-2xl">
+                    <p
+                      class="truncate text-lg font-semibold text-slate-100 sm:text-xl lg:text-2xl"
+                    >
                       {{ status.text }}
                     </p>
                     <!-- <p class="text-lg text-slate-400">{{ status.value }}</p> -->
@@ -282,7 +345,9 @@
                 >
                   OPERATING TIME TODAY
                 </p>
-                <p class="text-3xl font-semibold text-slate-100 sm:text-4xl lg:text-6xl">
+                <p
+                  class="text-3xl font-semibold text-slate-100 sm:text-4xl lg:text-6xl"
+                >
                   {{ formatTextMinutes(runtimeData.today) }}
                 </p>
               </div>
@@ -294,7 +359,9 @@
                 >
                   Minute
                 </span>
-                <span class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300">
+                <span
+                  class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300"
+                >
                   {{ runtimeData.today }}
                 </span>
               </div>
@@ -321,7 +388,9 @@
                   >
                     Minute
                   </span>
-                  <span class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300">
+                  <span
+                    class="block text-xl md:text-3xl lg:text-4xl font-semibold text-orange-300"
+                  >
                     {{ runtimeData.allTime }}
                   </span>
                 </div>
