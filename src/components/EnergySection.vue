@@ -66,7 +66,7 @@
                   <div>
                     <p class="text-lg text-slate-400 sm:text-2xl">Phase 1</p>
                     <p
-                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl"
                     >
                       {{ latestAverage.arus1 }}
                       <sub class="text-2xl sm:text-3xl">A</sub>
@@ -89,7 +89,7 @@
                   <div>
                     <p class="text-lg text-slate-400 sm:text-2xl">Phase 2</p>
                     <p
-                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl"
                     >
                       {{ latestAverage.arus2 }}
                       <sub class="text-2xl sm:text-3xl">A</sub>
@@ -112,7 +112,7 @@
                   <div>
                     <p class="text-lg text-slate-400 sm:text-2xl">Phase 3</p>
                     <p
-                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-6xl lg:text-7xl"
+                      class="mt-2 text-4xl font-semibold text-slate-100 sm:text-5xl lg:text-6xl"
                     >
                       {{ latestAverage.arus3 }}
                       <sub class="text-2xl sm:text-3xl">A</sub>
@@ -125,9 +125,13 @@
                 </div>
               </div>
             </div>
-            <div class="mt-4 px-6 flex justify-between text-base sm:text-lg">
-              <p>Last Update</p>
-              <p class="font-medium">{{ latestAverage.lastUpdate }}</p>
+            <div
+              class="mt-4 px-2 flex justify-start gap-5 text-base sm:text-lg"
+            >
+              <p>
+                Last Update
+                <span class="ml-4 font-medium">{{ latestAverage.lastUpdate }}</span>
+              </p>
             </div>
           </div>
         </div>
